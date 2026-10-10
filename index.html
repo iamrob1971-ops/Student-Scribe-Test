@@ -96,7 +96,7 @@ main { padding: 4px 18px 140px; flex: 1; }
 .scope { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--sel); border-radius: 14px; padding: 10px 14px; margin: 8px 0; font-size: 15px; font-weight: 500; }
 .mode-pill { background: var(--c); color: #fff; border-radius: 999px; padding: 2px 12px; font-weight: 600; font-size: 13px; }
 
-/* Floating Combine Action Bar */
+/* Floating Action Bar */
 .pick-bar { position: fixed; left: 0; right: 0; bottom: 74px; display: none; justify-content: center; pointer-events: none; z-index: 100; }
 .pick-bar div { pointer-events: auto; background: var(--card); border: 2px solid var(--c); border-radius: 20px; padding: 10px 18px; display: flex; gap: 14px; align-items: center; box-shadow: 0 8px 30px rgba(0,0,0,.18); }
 
@@ -104,6 +104,7 @@ main { padding: 4px 18px 140px; flex: 1; }
 .msg { padding: 12px 16px; border-radius: 16px; margin: 10px 0; max-width: 90%; }
 .msg.me { background: var(--c); color: #fff; margin-left: auto; }
 .msg.ai { background: var(--card); border: 1.5px solid var(--line); }
+.msg.err { background: #FDECEF; border: 1.5px solid #F8B4B4; color: #9B1C1C; }
 .opt { display: block; width: 100%; text-align: left; margin: 10px 0; border: 2px solid var(--line); background: var(--card); border-radius: 14px; padding: 14px; cursor: pointer; min-height: 58px; font-weight: 500; transition: border-color .15s; }
 .opt.ok { border-color: var(--ok); background: #E6F4EA; }
 .opt.no { border-color: var(--bad); background: #FCE8E6; }
@@ -153,7 +154,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
   <!-- Screen 1: Record Class -->
   <main id="mainWrap">
     <section class="screen on" id="s-rec">
-      <p class="center" id="recScheduleHint" style="font-weight:600;font-size:18px">🕘 Period 3 → Biology I is ready. Tap Record.</p>
+      <p class="center" id="recScheduleHint" style="font-weight:600;font-size:18px"></p>
       <div class="banner ok center" id="safeBanner">
         🔒 Audio saves safely every 10 seconds. Closing the laptop lid during class will not lose your notes.
       </div>
@@ -183,7 +184,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
       </div>
       <div class="wk">
         <button id="prevUnitBtn" aria-label="Previous unit">◀</button>
-        <b id="unitTitleLbl" style="font-size:18px">Unit 2 · Cells &amp; Energy</b>
+        <b id="unitTitleLbl" style="font-size:18px"></b>
         <button id="nextUnitBtn" aria-label="Next unit">▶</button>
       </div>
       <div class="track" id="unitTrack"></div>
@@ -199,10 +200,15 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
     <!-- Screen 4: Ask Coach (Interactive Grounded Chat) -->
     <section class="screen" id="s-chat">
       <div class="scope" data-scope></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 10px">
+        <span id="chatSubjectBadge" style="font-size:13px;font-weight:600;color:var(--c)">Active Channel: Biology I</span>
+        <button class="say" id="clearChatBtn" style="font-size:12px;padding:2px 10px">🗑️ Clear Chat</button>
+      </div>
       <div id="chatFeed"></div>
-      <div class="chips">
+      <div class="chips" id="chatChips">
         <button class="btn alt sample-q">What's on the test?</button>
-        <button class="btn alt sample-q">Explain it with an airplane or gaming analogy</button>
+        <button class="btn alt sample-q">Explain it with an airplane analogy</button>
+        <button class="btn alt sample-q">Give me a quick 3-question drill</button>
       </div>
       <div class="card row" style="padding:10px 14px">
         <input type="text" id="chatInput" placeholder="Ask your coach anything..." style="flex:1;border:0;background:transparent;outline:none">
@@ -259,10 +265,10 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
     <button class="say" id="closeCfgBtn">✕ Close</button>
   </div>
   <div class="dlg-body">
-    <h4>AI Provider &amp; Model</h4>
+    <h4>AI Provider &amp; Model (Google Gemini 3-Series)</h4>
     <label>Active Engine
       <select id="cfgProvider">
-        <option value="gemini">Google Gemini (Recommended / Paid or Studio Key)</option>
+        <option value="gemini">Google Gemini (3-Series Flash / Flash-Lite)</option>
         <option value="azure">Azure OpenAI APIM Gateway</option>
       </select>
     </label>
@@ -271,11 +277,15 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
       <label>Google Gemini API Key
         <input type="password" id="geminiApiKey" placeholder="Paste Google AI Studio Key">
       </label>
-      <label>Model
-        <select id="geminiModelSelect"></select>
+      <label>Primary Model
+        <select id="geminiModelSelect">
+          <option value="gemini-3.8-flash">gemini-3.8-flash (Recommended Flagship)</option>
+          <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (Fastest / Lowest Latency)</option>
+          <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite (High-Efficiency Fallback)</option>
+        </select>
       </label>
       <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
-        <button class="btn alt" id="testGeminiBtn" type="button" style="min-height:36px;font-size:13px">🔌 Test Key &amp; Load Models</button>
+        <button class="btn alt" id="testGeminiBtn" type="button" style="min-height:36px;font-size:13px">🔌 Verify Key &amp; List Models</button>
         <span id="geminiStatusBadge" style="font-size:12px;color:var(--mut)"></span>
       </div>
     </div>
@@ -309,7 +319,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
     </div>
 
     <h4>Mac's Learner Profile (Hidden Prompt Injector)</h4>
-    <p style="font-size:12px;color:var(--mut);margin:0">This profile is injected into the AI system instructions in the background. Mac never sees this text.</p>
+    <p style="font-size:12px;color:var(--mut);margin:0">Silently appended to the AI instructions. Mac never sees this text.</p>
     <textarea id="hiddenProfileText" rows="6" style="width:100%;font-size:13px;line-height:1.5"></textarea>
 
     <h4>Master AI Prompt Instructions</h4>
@@ -336,7 +346,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
 
 <script>
 /* =====================================================================
-   SECTION 1 - MAC'S ACTUAL CLASSES & DEFAULT LEARNER PROFILE
+   SECTION 1 - CURRICULUM DATABASE & MULTI-SUBJECT DATASETS
    ===================================================================== */
 const CLASSES = [
   { code: 'BIO_1',   name: 'Biology I',            period: 3, teacher: 'Smith',    color: '#2F6FDE', icon: '🧬' },
@@ -347,70 +357,150 @@ const CLASSES = [
 ];
 
 const DEFAULT_PROFILE = `STUDENT: Mac (Age 14, 9th Grade)
-PROFILE: Auditory Dyslexia, Central Auditory Processing Disorder (CAPD), Inattentive ADHD with Cognitive Disengagement Syndrome (sluggish processing, mental depletion).
+PROFILE: Auditory Dyslexia, Central Auditory Processing Disorder (CAPD), Inattentive ADHD with Cognitive Disengagement Syndrome (sluggish processing speed, mental fatigue).
 READING CEILING: ~5th grade decoding vocabulary. Keep sentences short. Zero walls of text. Do NOT use childish tone; speak to him as a mature young adult.
-PASSIONS & ANALOGIES: Commercial Aviation (airline pilot dreams, cockpits, thrust/lift, flight levels), World War II history, Coding, Video games.
-STRATEGY: Break knowledge into 3-4 bullet chunks. Bold the first letters of key terms. When he asks a question, explain it using aerodynamics, a cockpit instrument, or game mechanics. End with an active-recall check question.`;
+PASSIONS & ANALOGIES: Commercial Aviation (airline pilot dreams, cockpits, jet engines, flight levels, aerodynamics), WWII history, Coding, Video games.
+STRATEGY: Break answers into 3-4 bullet chunks. Bold the first letters of key terms. Always explain abstract ideas using an aircraft, engine, or flight control metaphor. End with a quick 1-sentence check question.`;
 
-const DEFAULT_SYSTEM_PROMPT = `You are a supportive, high-caliber study coach for a 9th-grade student named Mac.
+const DEFAULT_SYSTEM_PROMPT = `You are a supportive, high-caliber study flight coach for a 9th-grade student named Mac.
 Follow the hidden student profile provided.
 Keep responses concise, clear, and punchy.
 Never lecture in long paragraphs. Use clear bullet points and bold anchor stems.
 Ground all science and math concepts in aviation, mechanics, coding, or gaming.`;
 
+// Dedicated Mock Curriculum Datasets per Subject
+const CURRICULUM = {
+  BIO_1: {
+    unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy',
+    lectures: [
+      {
+        id: 'bio_1', i: '🔋', d: 'Mon', n: 5, t: 'ATP Energy',
+        c: 'ATP is the rechargeable battery that powers every cell.',
+        bold_stem: 'ATP Molecule',
+        analogy: 'Like the main battery on an airliner flight deck—when charged, it provides instant power to fly.',
+        cue: 'ATP loses a phosphate to release energy (becomes ADP)', ts: '11:20',
+        q: ['What is the primary job of ATP in a living cell?', ['Store genetic code', 'Provide instant cellular energy', 'Build bones'], 1]
+      },
+      {
+        id: 'bio_2', i: '🍃', d: 'Tue', n: 6, t: 'Chloroplasts',
+        c: 'Chloroplasts absorb sunlight to build glucose sugar in plants.',
+        bold_stem: 'Photosynthesis',
+        analogy: 'Solar panels on a glider wing turning sun directly into fuel.',
+        cue: 'Chlorophyll is the green pigment absorbing light', ts: '16:45',
+        q: ['What do chloroplasts convert sunlight into?', ['Protein', 'Chemical energy (Glucose)', 'Water'], 1]
+      },
+      {
+        id: 'bio_3', i: '⚡', d: 'Wed', n: 7, t: 'Mitochondria',
+        c: 'Mitochondria break down glucose into ATP through cellular respiration.',
+        bold_stem: 'Cell Powerhouse',
+        analogy: 'The jet engine of the cell—combusting fuel and air to generate massive thrust.',
+        cue: 'Lab on yeast respiration due Thursday', ts: '28:10',
+        q: ['Which organelle acts as the cell’s jet engine to make ATP?', ['Mitochondria', 'Nucleus', 'Cell wall'], 0]
+      },
+      {
+        id: 'bio_4', i: '💨', d: 'Thu', n: 8, t: 'Aerobic vs Anaerobic',
+        c: 'Aerobic respiration requires oxygen; anaerobic operates without it.',
+        bold_stem: 'Oxygen Requirement',
+        analogy: 'Cruising with twin jet engines (oxygen) vs gliding on emergency backup when engines flame out.',
+        cue: 'Lactic acid buildup happens without oxygen', ts: '08:30',
+        q: ['What does aerobic respiration require that anaerobic does not?', ['Water', 'Carbon', 'Oxygen'], 2]
+      },
+      {
+        id: 'bio_5', i: '🎯', d: 'Fri', n: 9, t: 'Respiration Equation',
+        c: 'The chemical formula: Glucose + Oxygen = Carbon Dioxide + Water + ATP.',
+        bold_stem: 'Respiration Equation',
+        analogy: 'The flight fuel burn equation: Jet-A Fuel + Compressed Air = Thrust + Exhaust.',
+        cue: 'Quiz on Cell Respiration and Photosynthesis this Friday!', ts: '14:20',
+        q: ['What are the two starting ingredients for cellular respiration?', ['Glucose and Oxygen', 'Sunlight and Carbon', 'Water and Salt'], 0]
+      }
+    ]
+  },
+  ALG_1: {
+    unitKey: 'U1', unitTitle: 'Unit 1 · Linear Equations & Slope',
+    lectures: [
+      {
+        id: 'alg_1', i: '📈', d: 'Mon', n: 12, t: 'Slope (m)',
+        c: 'Slope is the rate of change: rise over run (vertical change divided by horizontal change).',
+        bold_stem: 'Rate of Climb',
+        analogy: 'Aircraft climb gradient: how many feet of altitude you gain for every mile forward.',
+        cue: 'm = (y2 - y1) / (x2 - x1) will be on the midterm', ts: '09:40',
+        q: ['Slope is best described as…', ['Rise over run', 'Total distance', 'Center of circle'], 0]
+      },
+      {
+        id: 'alg_2', i: '🎯', d: 'Tue', n: 13, t: 'Y-Intercept (b)',
+        c: 'The y-intercept is where the line crosses the vertical y-axis when x equals zero.',
+        bold_stem: 'Field Elevation',
+        analogy: 'Airport elevation above sea level before the aircraft even starts its takeoff roll.',
+        cue: 'In y = mx + b, b is always the starting point', ts: '15:10',
+        q: ['In y = mx + b, what letter represents the y-intercept?', ['m', 'x', 'b'], 2]
+      },
+      {
+        id: 'alg_3', i: '📐', d: 'Wed', n: 14, t: 'Slope-Intercept Form',
+        c: 'y = mx + b allows you to graph any straight line immediately using starting point and slope.',
+        bold_stem: 'Flight Plan Formula',
+        analogy: 'Your altitude formula: Current Altitude = (Climb Rate × Minutes) + Starting Field Elevation.',
+        cue: 'Test on graphing slope-intercept next Tuesday', ts: '22:05',
+        q: ['What type of graph does y = mx + b always produce?', ['A circle', 'A straight line', 'A wave'], 1]
+      }
+    ]
+  },
+  BBL_FDN: {
+    unitKey: 'U1', unitTitle: 'Unit 1 · Creation & Covenants',
+    lectures: [
+      {
+        id: 'bbl_1', i: '🌍', d: 'Mon', n: 2, t: 'Creation Order',
+        c: 'God brings cosmos out of chaos, creating by divine word with intentional design.',
+        bold_stem: 'Divine Blueprint',
+        analogy: 'An aeronautical engineer designing an aircraft wing with purposeful physics, not random chance.',
+        cue: 'Know Genesis 1:1 key themes', ts: '10:15',
+        q: ['How did God create according to Genesis 1?', ['By Speaking His Word', 'By accident', 'Through chaos'], 0]
+      },
+      {
+        id: 'bbl_2', i: '🤝', d: 'Wed', n: 4, t: 'Abrahamic Covenant',
+        c: 'God makes a binding, unconditional promise: land, descendants, and worldwide blessing.',
+        bold_stem: 'Unbreakable Contract',
+        analogy: 'A flight clearance from air traffic control that guarantees your route with zero pilot deviation.',
+        cue: 'Faith counted as righteousness (Gen 15:6)', ts: '18:50',
+        q: ['What was promised in the Abrahamic Covenant?', ['Land, family, and blessing', 'Instant wealth only', 'An army'], 0]
+      }
+    ]
+  },
+  ENG_1: {
+    unitKey: 'U1', unitTitle: 'Unit 1 · Narrative Structure & Voice',
+    lectures: [
+      {
+        id: 'eng_1', i: '📖', d: 'Tue', n: 8, t: 'Plot Mountain',
+        c: 'Exposition, rising action, climax, falling action, and resolution form the spine of stories.',
+        bold_stem: 'Flight Profile',
+        analogy: 'Takeoff roll, climb to altitude, reaching maximum cruising ceiling (climax), descent, and landing.',
+        cue: 'Climax is the turning point of greatest tension', ts: '14:00',
+        q: ['What is the highest point of story tension?', ['Exposition', 'Climax', 'Resolution'], 1]
+      }
+    ]
+  },
+  WLN_1: {
+    unitKey: 'U1', unitTitle: 'Unit 1 · Sleep & Cognitive Recovery',
+    lectures: [
+      {
+        id: 'wln_1', i: '💤', d: 'Thu', n: 10, t: 'Sleep Architecture',
+        c: 'REM sleep consolidates memory and cognitive clarity; deep sleep restores physical muscle.',
+        bold_stem: 'Hangar Maintenance',
+        analogy: 'Overnight inspection and defragging aircraft flight computers so they don’t glitch in flight.',
+        cue: '8-9 hours required for teen working memory', ts: '07:45',
+        q: ['Which sleep stage is critical for memory consolidation?', ['Light Sleep', 'REM Sleep', 'Pre-sleep'], 1]
+      }
+    ]
+  }
+};
+
 let activeClassCode = 'BIO_1';
 let anchorBoldOn = true;
-let currentUnitIndex = 2;
-let pickedLectures = { 11: true };
+let pickedLectures = {};
 let quizIndex = 0;
 let quizScore = 0;
 
-// Embedded Biology Unit 2 Data (Real curriculum for Mac's hardest class)
-let LECTURES = [
-  {
-    id: 7, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '🔋', d: 'Mon', n: 5, t: 'ATP Energy',
-    c: 'ATP is the rechargeable battery that powers every cell.',
-    bold_stem: 'ATP Molecule',
-    analogy: 'Like the battery pack on an aircraft cockpit radio—when charged, it delivers immediate power to vital systems.',
-    cue: 'ATP loses a phosphate to release energy (becomes ADP)', ts: '11:20',
-    q: ['What is the primary job of ATP in a living cell?', ['Store genetic code', 'Provide instant cellular energy', 'Build bones'], 1]
-  },
-  {
-    id: 8, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '🍃', d: 'Tue', n: 6, t: 'Chloroplasts',
-    c: 'Chloroplasts absorb sunlight to build glucose sugar in plants.',
-    bold_stem: 'Photosynthesis',
-    analogy: 'Solar panels mounted on an aircraft wing converting sunlight directly into electrical fuel.',
-    cue: 'Chlorophyll is the green pigment absorbing light', ts: '16:45',
-    q: ['What do chloroplasts convert sunlight into?', ['Protein', 'Chemical energy (Glucose)', 'Water'], 1]
-  },
-  {
-    id: 9, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '⚡', d: 'Wed', n: 7, t: 'Mitochondria',
-    c: 'Mitochondria break down glucose into ATP through cellular respiration.',
-    bold_stem: 'Cell Powerhouse',
-    analogy: 'The jet engine of the cell—it takes in fuel (sugar) and oxygen, combusting it to produce thrust (ATP).',
-    cue: 'Lab on yeast respiration due Thursday', ts: '28:10',
-    q: ['Which organelle acts as the cell’s jet engine to make ATP?', ['Mitochondria', 'Nucleus', 'Cell wall'], 0]
-  },
-  {
-    id: 10, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '💨', d: 'Thu', n: 8, t: 'Aerobic vs Anaerobic',
-    c: 'Aerobic respiration requires oxygen; anaerobic operates without it.',
-    bold_stem: 'Oxygen Requirement',
-    analogy: 'Flying at normal cruise with twin jet engines (oxygen) vs. gliding on emergency battery power when engines flame out.',
-    cue: 'Lactic acid buildup happens without oxygen', ts: '08:30',
-    q: ['What does aerobic respiration require that anaerobic does not?', ['Water', 'Carbon', 'Oxygen'], 2]
-  },
-  {
-    id: 11, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '🎯', d: 'Fri', n: 9, t: 'Cellular Respiration',
-    c: 'The complete chemical formula: Glucose + Oxygen = Carbon Dioxide + Water + ATP.',
-    bold_stem: 'Respiration Equation',
-    analogy: 'The complete flight envelope equation: Fuel + Air = Thrust + Exhaust gases.',
-    cue: 'Quiz on Cell Respiration and Photosynthesis this Friday!', ts: '14:20',
-    q: ['What are the two starting ingredients for cellular respiration?', ['Glucose and Oxygen', 'Sunlight and Carbon', 'Water and Salt'], 0]
-  }
-];
-
 /* =====================================================================
-   SECTION 2 - INDEXEDDB RESILIENT LOCAL STORAGE VAULT
+   SECTION 2 - INDEXEDDB STORAGE (OFFLINE RECORDING VAULT)
    ===================================================================== */
 const DB_NAME = 'StudentScribe_v1';
 const DB_VERSION = 1;
@@ -449,7 +539,7 @@ async function idbGetAll(storeName) {
 }
 
 /* =====================================================================
-   SECTION 3 - AUDIO RECORDING & 10-SECOND SLICED PERSISTENCE
+   SECTION 3 - AUDIO RECORDING ENGINE (10-SECOND SLICES)
    ===================================================================== */
 let mediaRecorder = null;
 let audioStream = null;
@@ -533,7 +623,7 @@ async function stopRecording() {
 
   document.getElementById('recBtn').classList.remove('on');
   document.getElementById('recBtn').textContent = '● Record';
-  document.getElementById('recScheduleHint').textContent = 'Saved safely ✅ Ready for Home Wi-Fi processing.';
+  updateRecScheduleHint();
   showToast('Class recorded safely to Chromebook storage!');
   updateQueueUI();
 }
@@ -545,16 +635,35 @@ document.addEventListener('visibilitychange', () => {
 });
 
 /* =====================================================================
-   SECTION 4 - BIONIC STEM BOLDING & TEXT-TO-SPEECH
+   SECTION 4 - CLEAN MARKDOWN & BIONIC READING ENGINE
    ===================================================================== */
-function applyBionic(text) {
-  if (!anchorBoldOn || !text) return text;
-  return text.replace(/\b([a-zA-Z]{1,3})([a-zA-Z]+)?\b/g, (m, stem, rest) => `<b>${stem}</b>${rest || ''}`);
+function mdToHtml(md) {
+  if (!md) return '';
+  // Convert markdown boldly without collision
+  let s = md
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^\s*[-*]\s+(.*)$/gm, '<li>$1</li>');
+  
+  // Wrap list items
+  if (s.indexOf('<li>') > -1) {
+    s = s.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+  }
+  return s.replace(/\n\n/g, '<br><br>');
+}
+
+function applyBionic(htmlOrText) {
+  if (!anchorBoldOn || !htmlOrText) return htmlOrText;
+  // Apply bionic anchors to text outside of HTML tags
+  return htmlOrText.replace(/(^|>)([^<]+)(<|$)/g, (m, prefix, text, suffix) => {
+    const bionic = text.replace(/\b([a-zA-Z]{1,3})([a-zA-Z]+)?\b/g, (w, stem, rest) => `<b>${stem}</b>${rest || ''}`);
+    return prefix + bionic + suffix;
+  });
 }
 
 function speakText(rawText) {
   window.speechSynthesis.cancel();
-  const clean = rawText.replace(/[*#_<b><\/b>]/g, '');
+  const clean = rawText.replace(/[*#_<b><\/b><strong><\/strong>]/g, '');
   const utt = new SpeechSynthesisUtterance(clean);
   utt.rate = parseFloat(localStorage.getItem('ss_tts_rate') || '0.92');
   utt.pitch = 1.0;
@@ -562,10 +671,21 @@ function speakText(rawText) {
 }
 
 /* =====================================================================
-   SECTION 5 - UI RENDER ENGINE (UNIT MAP, GUIDE, CHAT, QUIZ)
+   SECTION 5 - MULTI-SUBJECT UI & NAVIGATION ENGINE
    ===================================================================== */
+function getActiveDataset() {
+  return CURRICULUM[activeClassCode] || CURRICULUM['BIO_1'];
+}
+
 function getSelectedLectures() {
-  return LECTURES.filter(l => pickedLectures[l.id]);
+  const ds = getActiveDataset();
+  const arr = ds.lectures.filter(l => pickedLectures[l.id]);
+  return arr.length ? arr : [ds.lectures[ds.lectures.length - 1]];
+}
+
+function updateRecScheduleHint() {
+  const c = CLASSES.find(x => x.code === activeClassCode);
+  document.getElementById('recScheduleHint').textContent = `🕘 Period ${c.period} → ${c.name} is ready. Tap Record.`;
 }
 
 function renderClassRibbon() {
@@ -575,18 +695,35 @@ function renderClassRibbon() {
     const btn = document.createElement('button');
     btn.className = `cls ${c.code === activeClassCode ? 'on' : ''}`;
     btn.textContent = `${c.icon} ${c.name}`;
-    btn.onclick = () => {
-      activeClassCode = c.code;
-      document.documentElement.style.setProperty('--c', c.color);
-      document.documentElement.style.setProperty('--sel', c.color + '22');
-      renderClassRibbon();
-      renderAll();
-    };
+    btn.onclick = () => switchClass(c.code);
     rib.appendChild(btn);
   });
 }
 
+function switchClass(code) {
+  activeClassCode = code;
+  const c = CLASSES.find(x => x.code === code);
+  document.documentElement.style.setProperty('--c', c.color);
+  document.documentElement.style.setProperty('--sel', c.color + '22');
+
+  // Reset lecture selections to latest in this course
+  const ds = getActiveDataset();
+  pickedLectures = {};
+  if (ds.lectures.length) {
+    pickedLectures[ds.lectures[ds.lectures.length - 1].id] = true;
+  }
+  quizIndex = 0;
+  quizScore = 0;
+
+  renderClassRibbon();
+  updateRecScheduleHint();
+  renderAll();
+  loadSubjectChat();
+  showToast(`Switched channel to ${c.name}`);
+}
+
 function renderScopeHeader() {
+  const ds = getActiveDataset();
   const selected = getSelectedLectures();
   const isArena = selected.length > 1;
   const h = `
@@ -599,20 +736,22 @@ function renderScopeHeader() {
 }
 
 function renderUnitTrack() {
+  const ds = getActiveDataset();
+  document.getElementById('unitTitleLbl').textContent = ds.unitTitle;
   const track = document.getElementById('unitTrack');
   track.innerHTML = '';
-  const currentUnitLectures = LECTURES.filter(l => l.unitKey === `U${currentUnitIndex}`);
 
-  currentUnitLectures.forEach((l, idx) => {
+  ds.lectures.forEach((l, idx) => {
     const isPicked = !!pickedLectures[l.id];
+    const isLast = idx === ds.lectures.length - 1;
     const tile = document.createElement('button');
-    tile.className = `tile ${isPicked ? 'on' : ''} ${l.id === 11 ? 'today' : ''}`;
+    tile.className = `tile ${isPicked ? 'on' : ''} ${isLast ? 'today' : ''}`;
     tile.innerHTML = `
       <span class="ck">${isPicked ? '✓' : ''}</span>
       <span class="ic">${l.i}</span>
       <b>Part ${idx + 1}</b>
       <small>${l.t}</small>
-      <small style="font-size:11px;color:var(--mut)">${l.id === 11 ? 'Today' : l.d + ' ' + l.n}</small>
+      <small style="font-size:11px;color:var(--mut)">${isLast ? 'Today' : l.d + ' ' + l.n}</small>
     `;
     tile.onclick = () => {
       if (pickedLectures[l.id]) delete pickedLectures[l.id];
@@ -631,10 +770,6 @@ function renderUnitTrack() {
 function renderStudyGuide() {
   const selected = getSelectedLectures();
   const container = document.getElementById('guideContent');
-  if (!selected.length) {
-    container.innerHTML = '<div class="card center"><p>Pick a flight level on the Unit Map to read study notes 🗺️</p></div>';
-    return;
-  }
 
   let html = `
     <div class="card">
@@ -644,7 +779,7 @@ function renderStudyGuide() {
     <div class="card">
       <h3>🔑 Core Concepts <button class="say" onclick="speakText(this.parentElement.nextElementSibling.textContent)">🔊 Read</button></h3>
       <ul>
-        ${selected.map(l => `<li>${l.i} <strong>${l.bold_stem}:</strong> ${applyBionic(l.c)} <span class="badge">Part ${l.id - 6}</span></li>`).join('')}
+        ${selected.map((l, idx) => `<li>${l.i} <strong>${l.bold_stem}:</strong> ${applyBionic(l.c)} <span class="badge">Part ${idx + 1}</span></li>`).join('')}
       </ul>
     </div>
     <div class="card" style="border-color:var(--c)">
@@ -674,26 +809,9 @@ function renderStudyGuide() {
   container.innerHTML = html;
 }
 
-function renderChat() {
-  const selected = getSelectedLectures();
-  const feed = document.getElementById('chatFeed');
-  if (!feed.children.length) {
-    feed.innerHTML = `
-      <div class="msg ai">
-        <button class="say" style="float:right" onclick="speakText(this.parentElement.textContent)">🔊</button>
-        Pilot Mac, I am your <b>${CLASSES.find(c => c.code === activeClassCode).name}</b> flight coach. Ask me anything about ${selected.length > 1 ? 'your combined unit notes' : 'today\'s class'}, or tap an idea below!
-      </div>
-    `;
-  }
-}
-
 function renderQuiz() {
   const selected = getSelectedLectures();
   const container = document.getElementById('quizContent');
-  if (!selected.length) {
-    container.innerHTML = '<div class="card center"><p>Pick parts on the Unit Map first 🗺️</p></div>';
-    return;
-  }
 
   if (quizIndex >= selected.length) {
     container.innerHTML = `
@@ -712,7 +830,7 @@ function renderQuiz() {
   container.innerHTML = `
     <div class="row">
       <b>Flight Check ${quizIndex + 1} of ${selected.length}</b>
-      <span class="badge">${cur.i} Part ${cur.id - 6}</span>
+      <span class="badge">${cur.i} ${cur.t}</span>
     </div>
     <div class="progress-bar"><i style="width:${(quizIndex / selected.length) * 100}%"></i></div>
     <div class="card">
@@ -743,11 +861,10 @@ function renderAll() {
   renderScopeHeader();
   renderUnitTrack();
   renderStudyGuide();
-  renderChat();
   renderQuiz();
 }
 
-/* Screen Router */
+/* Screen Router with Global Delegated Listener */
 function navigateTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
   document.querySelectorAll('nav.dock button').forEach(b => b.classList.remove('on'));
@@ -767,7 +884,6 @@ function navigateTo(screenId) {
   renderAll();
 }
 
-// Global Delegated Click Listener: guarantees dynamic elements like "Change" always work
 document.addEventListener('click', (e) => {
   const g = e.target.closest('[data-go]');
   if (g) {
@@ -777,8 +893,83 @@ document.addEventListener('click', (e) => {
 });
 
 /* =====================================================================
-   SECTION 6 - LIVE AI CHAT & SPEECH-TO-TEXT WITH GROUNDING
+   SECTION 6 - PER-SUBJECT ISOLATED CHAT WITH GEMINI 3-SERIES WATERFALL
    ===================================================================== */
+function getChatStorageKey() {
+  return `ss_chat_history_${activeClassCode}`;
+}
+
+function loadSubjectChat() {
+  const c = CLASSES.find(x => x.code === activeClassCode);
+  document.getElementById('chatSubjectBadge').textContent = `Active Channel: ${c.name} (${c.teacher})`;
+  const feed = document.getElementById('chatFeed');
+  
+  const saved = localStorage.getItem(getChatStorageKey());
+  if (saved) {
+    feed.innerHTML = saved;
+  } else {
+    feed.innerHTML = `
+      <div class="msg ai">
+        <button class="say" style="float:right" onclick="speakText(this.parentElement.textContent)">🔊</button>
+        Pilot Mac, I am your <b>${c.name}</b> flight coach. Ask me anything about your current unit notes, or tap an idea below!
+      </div>
+    `;
+  }
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function saveSubjectChat() {
+  const feed = document.getElementById('chatFeed');
+  localStorage.setItem(getChatStorageKey(), feed.innerHTML);
+}
+
+document.getElementById('clearChatBtn').addEventListener('click', () => {
+  if (!confirm('Clear chat history for this class?')) return;
+  localStorage.removeItem(getChatStorageKey());
+  loadSubjectChat();
+  showToast('Chat channel reset');
+});
+
+// Resilient Waterfall: gemini-3.8-flash -> gemini-3.5-flash-lite -> gemini-3.1-flash-lite
+async function queryGeminiWaterfall(fullPrompt, key, chosenModel) {
+  const chain = [chosenModel, 'gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite']
+    .filter((v, i, a) => v && a.indexOf(v) === i);
+
+  let lastError = null;
+  for (let i = 0; i < chain.length; i++) {
+    const curModel = chain[i];
+    try {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(curModel)}:generateContent?key=${key}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
+          generationConfig: { temperature: 0.3, maxOutputTokens: 2048 }
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        const msg = data.error?.message || `HTTP ${res.status}`;
+        // If throttled or high demand, trigger failover
+        if (res.status === 503 || res.status === 429 || /demand|overload|quota|exhaust/i.test(msg)) {
+          lastError = `${curModel}: ${msg}`;
+          continue;
+        }
+        throw new Error(msg);
+      }
+
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) throw new Error('No response returned');
+      return { text: text, modelUsed: curModel };
+    } catch (e) {
+      lastError = e.message;
+      if (/API_KEY_INVALID/i.test(e.message)) throw e;
+    }
+  }
+  throw new Error(lastError || 'All models busy');
+}
+
 async function sendChatMessage(query) {
   const text = query || document.getElementById('chatInput').value.trim();
   if (!text) return;
@@ -790,47 +981,46 @@ async function sendChatMessage(query) {
 
   const key = localStorage.getItem('ss_gemini_key') || '';
   if (!key) {
-    feed.innerHTML += `<div class="msg ai"><span style="color:var(--bad)">⚠️ Please ask a parent to enter the Gemini API Key under Settings (⚙️).</span></div>`;
+    feed.innerHTML += `<div class="msg ai err">⚠️ Please ask a parent to enter the Gemini API Key under Settings (⚙️).</div>`;
     feed.scrollTop = feed.scrollHeight;
+    saveSubjectChat();
     return;
   }
 
-  const model = localStorage.getItem('ss_gemini_model') || 'gemini-2.5-flash';
+  const model = localStorage.getItem('ss_gemini_model') || 'gemini-3.8-flash';
   const hiddenProfile = localStorage.getItem('ss_hidden_profile') || DEFAULT_PROFILE;
   const sysInst = localStorage.getItem('ss_master_prompt') || DEFAULT_SYSTEM_PROMPT;
 
   const activeNotes = getSelectedLectures().map(l => `${l.t}: ${l.c} (Analogy: ${l.analogy})`).join('\n');
   const fullPrompt = `${sysInst}\n\n[STUDENT COGNITIVE PROFILE]\n${hiddenProfile}\n\n[CLASS STUDY NOTES]\n${activeNotes}\n\n[STUDENT QUESTION]\n${text}`;
 
-  feed.innerHTML += `<div class="msg ai" id="thinkingMsg">Flight Coach is calculating…</div>`;
+  const thinkingId = 'thinking_' + Date.now();
+  feed.innerHTML += `<div class="msg ai" id="${thinkingId}">Flight Coach is calculating route…</div>`;
   feed.scrollTop = feed.scrollHeight;
 
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${key}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 600 }
-      })
-    });
-    const data = await res.json();
-    document.getElementById('thinkingMsg')?.remove();
+    const result = await queryGeminiWaterfall(fullPrompt, key, model);
+    document.getElementById(thinkingId)?.remove();
 
-    if (!res.ok) throw new Error(data.error?.message || 'Gemini error');
-    const answer = data.candidates[0].content.parts[0].text;
-    
+    const formattedHtml = applyBionic(mdToHtml(result.text));
     feed.innerHTML += `
       <div class="msg ai">
         <button class="say" style="float:right" onclick="speakText(this.parentElement.textContent)">🔊</button>
-        ${applyBionic(answer)}
+        ${formattedHtml}
       </div>
     `;
     feed.scrollTop = feed.scrollHeight;
+    saveSubjectChat();
   } catch (err) {
-    document.getElementById('thinkingMsg')?.remove();
-    feed.innerHTML += `<div class="msg ai"><span style="color:var(--bad)">Radio static: ${err.message}</span></div>`;
+    document.getElementById(thinkingId)?.remove();
+    feed.innerHTML += `
+      <div class="msg ai err">
+        Radio static: ${err.message}<br>
+        <button class="btn alt" style="margin-top:8px;padding:4px 12px;font-size:13px" onclick="sendChatMessage('${text.replace(/'/g, "\\'")}')">🔄 Try Again</button>
+      </div>
+    `;
     feed.scrollTop = feed.scrollHeight;
+    saveSubjectChat();
   }
 }
 
@@ -839,7 +1029,7 @@ document.getElementById('chatInput').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') sendChatMessage();
 });
 
-// Speech Recognition for Chat Microphone
+// Speech Recognition for Chat Mic
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (SR) {
   const reco = new SR();
@@ -863,7 +1053,6 @@ if (SR) {
   document.getElementById('chatMicBtn').style.display = 'none';
 }
 
-// Sample question chips automatically send query
 document.addEventListener('click', (e) => {
   const sq = e.target.closest('.sample-q');
   if (sq) sendChatMessage(sq.textContent.trim());
@@ -898,19 +1087,17 @@ function openParentVault() {
   document.getElementById('masterSystemPrompt').value = localStorage.getItem('ss_master_prompt') || DEFAULT_SYSTEM_PROMPT;
   document.getElementById('cfgNewPin').value = getParentPin();
   
-  const savedModel = localStorage.getItem('ss_gemini_model') || 'gemini-2.5-flash';
+  const savedModel = localStorage.getItem('ss_gemini_model') || 'gemini-3.8-flash';
   const sel = document.getElementById('geminiModelSelect');
-  if (!sel.options.length) {
-    const opt = document.createElement('option');
-    opt.value = savedModel; opt.textContent = savedModel;
-    sel.appendChild(opt);
+  if (Array.from(sel.options).some(o => o.value === savedModel)) {
+    sel.value = savedModel;
   }
   document.getElementById('cfgDlg').showModal();
 }
 
 document.getElementById('closeCfgBtn').addEventListener('click', () => document.getElementById('cfgDlg').close());
 
-// Test Gemini Key & Load Models (from Sermon Scribe)
+// Test Key & Fetch 3-Series Models
 document.getElementById('testGeminiBtn').addEventListener('click', async () => {
   const k = document.getElementById('geminiApiKey').value.trim();
   const badge = document.getElementById('geminiStatusBadge');
@@ -923,7 +1110,7 @@ document.getElementById('testGeminiBtn').addEventListener('click', async () => {
     if (!r.ok) throw new Error(d.error?.message || 'Key failed');
 
     const names = (d.models || [])
-      .filter(m => /gemini/i.test(m.name) && (m.supportedGenerationMethods || []).includes('generateContent'))
+      .filter(m => /gemini/i.test(m.name) && (m.supportedGenerationMethods || []).includes('generateContent') && !/embedding|image|tts|robotics/i.test(m.name))
       .map(m => m.name.replace(/^models\//, ''))
       .sort().reverse();
 
@@ -935,11 +1122,11 @@ document.getElementById('testGeminiBtn').addEventListener('click', async () => {
       sel.appendChild(o);
     });
 
-    if (names.includes('gemini-2.5-flash')) sel.value = 'gemini-2.5-flash';
-    else if (names.includes('gemini-1.5-flash')) sel.value = 'gemini-1.5-flash';
+    if (names.includes('gemini-3.8-flash')) sel.value = 'gemini-3.8-flash';
+    else if (names.includes('gemini-3.5-flash-lite')) sel.value = 'gemini-3.5-flash-lite';
 
-    badge.textContent = `✓ Connected! ${names.length} models loaded.`;
-    showToast('Gemini API verified successfully!');
+    badge.textContent = `✓ Connected! ${names.length} models verified.`;
+    showToast('Gemini API connection verified!');
   } catch (err) {
     badge.textContent = '❌ Failed: ' + err.message;
     alert('Verification failed: ' + err.message);
@@ -957,7 +1144,7 @@ document.getElementById('saveCfgBtn').addEventListener('click', () => {
   if (newPin.length === 4) localStorage.setItem(PARENT_PIN_KEY, newPin);
 
   document.getElementById('cfgDlg').close();
-  showToast('Parent vault settings saved!');
+  showToast('Parent settings saved!');
 });
 
 /* =====================================================================
@@ -982,6 +1169,7 @@ document.getElementById('ancBtn').addEventListener('click', function() {
   anchorBoldOn = !anchorBoldOn;
   this.textContent = `Aa Anchor bold: ${anchorBoldOn ? 'On' : 'Off'}`;
   renderAll();
+  loadSubjectChat();
 });
 
 document.querySelectorAll('.tints button').forEach(b => {
@@ -995,18 +1183,19 @@ document.querySelectorAll('nav.dock button').forEach(b => {
   b.addEventListener('click', () => navigateTo(b.dataset.go));
 });
 
-document.getElementById('prevUnitBtn').onclick = () => { currentUnitIndex = 1; renderAll(); };
-document.getElementById('nextUnitBtn').onclick = () => { currentUnitIndex = 2; renderAll(); };
+document.getElementById('prevUnitBtn').onclick = () => { showToast('Previous units archived'); };
+document.getElementById('nextUnitBtn').onclick = () => { showToast('Current active unit'); };
 
 document.querySelectorAll('[data-q]').forEach(btn => {
   btn.onclick = () => {
     const q = btn.dataset.q;
+    const ds = getActiveDataset();
     pickedLectures = {};
-    LECTURES.forEach(l => {
+    ds.lectures.forEach((l, idx) => {
       if (q === 'all') pickedLectures[l.id] = true;
-      if (q === 'today' && l.id === 11) pickedLectures[l.id] = true;
-      if (q === 'unit' && l.unitKey === `U${currentUnitIndex}`) pickedLectures[l.id] = true;
-      if (q === 'test' && l.id >= 9) pickedLectures[l.id] = true;
+      if (q === 'today' && idx === ds.lectures.length - 1) pickedLectures[l.id] = true;
+      if (q === 'unit') pickedLectures[l.id] = true;
+      if (q === 'test' && idx >= ds.lectures.length - 2) pickedLectures[l.id] = true;
     });
     renderAll();
   };
@@ -1017,7 +1206,6 @@ document.getElementById('recBtn').addEventListener('click', () => {
   else startRecording();
 });
 
-// Batch AI Processing simulation / execution
 document.getElementById('batchProcessBtn').addEventListener('click', async () => {
   const list = await idbGetAll('lectures');
   const pending = list.filter(l => l.status === 'ready_for_processing');
@@ -1038,8 +1226,22 @@ document.getElementById('batchProcessBtn').addEventListener('click', async () =>
 (function init() {
   const savedTheme = localStorage.getItem('ss_theme');
   if (savedTheme) document.documentElement.dataset.t = savedTheme;
+  
+  // Set initial class
+  const initialCls = CLASSES[0];
+  activeClassCode = initialCls.code;
+  document.documentElement.style.setProperty('--c', initialCls.color);
+  document.documentElement.style.setProperty('--sel', initialCls.color + '22');
+
+  const ds = getActiveDataset();
+  if (ds.lectures.length) {
+    pickedLectures[ds.lectures[ds.lectures.length - 1].id] = true;
+  }
+
   renderClassRibbon();
+  updateRecScheduleHint();
   renderAll();
+  loadSubjectChat();
   updateQueueUI();
 })();
 </script>
