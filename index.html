@@ -116,14 +116,14 @@ nav.dock button { flex: 1; max-width: 170px; border: 0; background: none; color:
 nav.dock button span { display: block; font-size: 22px; margin-bottom: 2px; }
 nav.dock button.on { color: var(--c); font-weight: 700; }
 
-/* Settings Modal Dialog */
+/* Settings & PIN Dialog Modals */
 dialog.cfg-dlg { border: 1.5px solid var(--line); border-radius: 20px; background: var(--card); color: var(--ink); padding: 0; width: min(840px, 94vw); max-height: 90vh; }
 dialog::backdrop { background: rgba(30,30,30,.55); }
 .dlg-head { padding: 16px 22px; border-bottom: 1.5px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
 .dlg-body { padding: 18px 22px; overflow-y: auto; max-height: calc(90vh - 140px); display: grid; gap: 14px; }
 .dlg-body h4 { margin: 12px 0 4px; color: var(--c); text-transform: uppercase; font-size: 13px; letter-spacing: .04em; }
 .dlg-body label { display: grid; gap: 4px; font-size: 14px; font-weight: 500; }
-.dlg-body input, .dlg-body select { border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 12px; background: var(--bg); }
+.dlg-body input, .dlg-body select, .dlg-body textarea { border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 12px; background: var(--bg); }
 .dlg-foot { padding: 14px 22px; border-top: 1.5px solid var(--line); display: flex; gap: 10px; justify-content: flex-end; }
 .toast { position: fixed; left: 50%; bottom: 84px; transform: translate(-50%, 20px); background: #2B2A33; color: #fff; padding: 10px 20px; border-radius: 12px; font-size: 14px; font-weight: 500; opacity: 0; pointer-events: none; transition: .2s; z-index: 200; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
@@ -134,7 +134,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
 <div class="app">
   <!-- Top Header -->
   <header class="top">
-    <div class="brand">📓 Student Scribe</div>
+    <div class="brand">✈️ Student Scribe</div>
     <div class="top-actions">
       <button class="tog" id="ancBtn">Aa Anchor bold: On</button>
       <div class="tints" aria-label="Color Theme">
@@ -143,7 +143,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
         <button style="background:#E3E9EF" data-t="blue" title="Blue"></button>
         <button style="background:#1E1E1E" data-t="dark" title="Dark"></button>
       </div>
-      <button class="btn-icon" id="openCfgBtn" title="Parent & Cloud Settings">⚙️</button>
+      <button class="btn-icon" id="openCfgBtn" title="Parent & Admin Vault">⚙️</button>
     </div>
   </header>
 
@@ -153,7 +153,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
   <!-- Screen 1: Record Class -->
   <main id="mainWrap">
     <section class="screen on" id="s-rec">
-      <p class="center" id="recScheduleHint" style="font-weight:600;font-size:18px">🕘 Period 2 → Physical Science is ready. Tap Record.</p>
+      <p class="center" id="recScheduleHint" style="font-weight:600;font-size:18px">🕘 Period 3 → Biology I is ready. Tap Record.</p>
       <div class="banner ok center" id="safeBanner">
         🔒 Audio saves safely every 10 seconds. Closing the laptop lid during class will not lose your notes.
       </div>
@@ -164,7 +164,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
       </div>
 
       <div class="card" id="homeSyncCard" style="margin-top:24px">
-        <h3>⚡ Study Hall & Home Wi-Fi</h3>
+        <h3>⚡ Study Hall &amp; Home Wi-Fi</h3>
         <p id="queueStatusText">Loading saved sessions...</p>
         <div class="chips">
           <button class="btn" id="batchProcessBtn">🚀 Process Lectures with AI</button>
@@ -183,11 +183,11 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
       </div>
       <div class="wk">
         <button id="prevUnitBtn" aria-label="Previous unit">◀</button>
-        <b id="unitTitleLbl" style="font-size:18px">Unit 2 · Forces &amp; Motion</b>
+        <b id="unitTitleLbl" style="font-size:18px">Unit 2 · Cells &amp; Energy</b>
         <button id="nextUnitBtn" aria-label="Next unit">▶</button>
       </div>
       <div class="track" id="unitTrack"></div>
-      <p class="center" style="font-size:14px;color:var(--mut)">Tap any lecture card to view it. Pick multiple cards to enter Exam Prep.</p>
+      <p class="center" style="font-size:14px;color:var(--mut)">Tap any flight card to inspect it. Pick multiple cards to enter Exam Prep.</p>
     </section>
 
     <!-- Screen 3: Study Guide -->
@@ -202,10 +202,10 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
       <div id="chatFeed"></div>
       <div class="chips">
         <button class="btn alt sample-q">What's on the test?</button>
-        <button class="btn alt sample-q">Explain it with a video game analogy</button>
+        <button class="btn alt sample-q">Explain it with an airplane or gaming analogy</button>
       </div>
       <div class="card row" style="padding:10px 14px">
-        <input type="text" id="chatInput" placeholder="Type or speak a question..." style="flex:1;border:0;background:transparent;outline:none">
+        <input type="text" id="chatInput" placeholder="Ask your coach anything..." style="flex:1;border:0;background:transparent;outline:none">
         <button class="say" id="chatMicBtn">🎤 Speak</button>
         <button class="btn" id="chatSendBtn" style="min-height:40px;padding:8px 16px">Send</button>
       </div>
@@ -221,7 +221,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
   <!-- Sticky Multi-Select Action Bar -->
   <div class="pick-bar" id="pickBar">
     <div>
-      <b id="pickCountLbl">✅ 2 lectures selected</b>
+      <b id="pickCountLbl">✅ 2 parts selected</b>
       <button class="btn" data-go="guide">Study Selected ▶</button>
     </div>
   </div>
@@ -236,18 +236,34 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
   </nav>
 </div>
 
+<!-- Parent PIN Access Modal -->
+<dialog class="cfg-dlg" id="pinDlg" style="max-width:380px">
+  <div class="dlg-head">
+    <h3 style="margin:0;color:var(--c)">🔒 Parent &amp; Coach Gate</h3>
+    <button class="say" id="closePinBtn">✕</button>
+  </div>
+  <div class="dlg-body" style="text-align:center">
+    <p style="font-size:14px;color:var(--mut);margin:0">Enter 4-digit PIN to access credentials and profile:</p>
+    <input type="password" id="pinInput" maxlength="4" placeholder="••••" style="font-size:28px;text-align:center;letter-spacing:.3em;width:140px;margin:10px auto">
+    <p id="pinError" style="color:var(--bad);font-size:13px;display:none">Incorrect PIN. Try again.</p>
+  </div>
+  <div class="dlg-foot">
+    <button class="btn" id="submitPinBtn" style="width:100%">Unlock Settings</button>
+  </div>
+</dialog>
+
 <!-- Parent & Cloud Configuration Dialog Modal -->
 <dialog class="cfg-dlg" id="cfgDlg">
   <div class="dlg-head">
-    <h3 style="margin:0;color:var(--c)">⚙️ Settings &amp; Cloud Sync</h3>
+    <h3 style="margin:0;color:var(--c)">⚙️ Parent Vault &amp; System Engine</h3>
     <button class="say" id="closeCfgBtn">✕ Close</button>
   </div>
   <div class="dlg-body">
     <h4>AI Provider &amp; Model</h4>
     <label>Active Engine
       <select id="cfgProvider">
-        <option value="gemini">Google Gemini (Recommended / High Concurrency)</option>
-        <option value="azure">Azure OpenAI APIM Gateway (Whisper + GPT)</option>
+        <option value="gemini">Google Gemini (Recommended / Paid or Studio Key)</option>
+        <option value="azure">Azure OpenAI APIM Gateway</option>
       </select>
     </label>
 
@@ -256,27 +272,31 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
         <input type="password" id="geminiApiKey" placeholder="Paste Google AI Studio Key">
       </label>
       <label>Model
-        <input type="text" id="geminiModel" value="gemini-2.5-flash">
+        <select id="geminiModelSelect"></select>
       </label>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+        <button class="btn alt" id="testGeminiBtn" type="button" style="min-height:36px;font-size:13px">🔌 Test Key &amp; Load Models</button>
+        <span id="geminiStatusBadge" style="font-size:12px;color:var(--mut)"></span>
+      </div>
     </div>
 
     <div id="azureBox" style="display:none">
       <label>APIM Endpoint
         <input type="text" id="azureEndpoint" placeholder="https://your-apim.azure-api.net/openai">
       </label>
-      <label>GPT Deployment
+      <label>Deployment Name
         <input type="text" id="azureGptDeploy" value="gpt-4o-mini">
       </label>
       <label>Whisper Deployment
         <input type="text" id="azureWhisperDeploy" value="whisper">
       </label>
       <label>APIM Subscription Key
-        <input type="password" id="azureSubKey" placeholder="Optional subscription key">
+        <input type="password" id="azureSubKey" placeholder="Leave blank if APIM requires no key">
       </label>
     </div>
 
     <h4>SharePoint Sync (Bible_App Tenant)</h4>
-    <p style="font-size:13px;color:var(--mut);margin:0">Syncs study guides to <code>Student_Lectures</code> and upcoming tests to <code>Student_Deadlines</code>.</p>
+    <p style="font-size:13px;color:var(--mut);margin:0">Writes study guide to <code>Student_Lectures</code> and tests to <code>Student_Deadlines</code>.</p>
     <label>Tenant Authority
       <input type="text" id="spAuthority" value="https://login.microsoftonline.com/daa6322e-b4e5-415c-8cc7-258c866f29d7">
     </label>
@@ -288,20 +308,27 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
       <span id="msUserBadge" style="font-size:13px;font-weight:600">Not signed in</span>
     </div>
 
-    <h4>Student Learning Profile</h4>
-    <label>Student Interests (Used for real-world analogies)
-      <input type="text" id="cfgInterests" value="video games, sports, car engines, building">
+    <h4>Mac's Learner Profile (Hidden Prompt Injector)</h4>
+    <p style="font-size:12px;color:var(--mut);margin:0">This profile is injected into the AI system instructions in the background. Mac never sees this text.</p>
+    <textarea id="hiddenProfileText" rows="6" style="width:100%;font-size:13px;line-height:1.5"></textarea>
+
+    <h4>Master AI Prompt Instructions</h4>
+    <textarea id="masterSystemPrompt" rows="6" style="width:100%;font-size:13px;line-height:1.5"></textarea>
+
+    <h4>Security &amp; TTS Settings</h4>
+    <label>Change Parent PIN
+      <input type="password" id="cfgNewPin" maxlength="4" value="1971" style="width:120px">
     </label>
     <label>Read Aloud (TTS) Speed
       <select id="cfgTtsRate">
         <option value="0.85">0.85x (Slower &amp; deliberate)</option>
-        <option value="0.92" selected>0.92x (Recommended for dyslexia)</option>
+        <option value="0.92" selected>0.92x (Paced for Auditory Processing)</option>
         <option value="1.0">1.0x (Normal speed)</option>
       </select>
     </label>
   </div>
   <div class="dlg-foot">
-    <button class="btn" id="saveCfgBtn">Save &amp; Close</button>
+    <button class="btn" id="saveCfgBtn">Save All &amp; Close</button>
   </div>
 </dialog>
 
@@ -309,63 +336,76 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
 
 <script>
 /* =====================================================================
-   SECTION 1 - MASTER STATE & PRE-CONFIGURED CLASSES
+   SECTION 1 - MAC'S ACTUAL CLASSES & DEFAULT LEARNER PROFILE
    ===================================================================== */
 const CLASSES = [
-  { code: 'SCI_PHYS', name: 'Physical Science', period: 2, color: '#2F6FDE', icon: '🧪' },
-  { code: 'ALG_1',    name: 'Algebra 1',        period: 3, color: '#8A4FD6', icon: '📐' },
-  { code: 'HIST_WLD', name: 'World History',    period: 5, color: '#C2703A', icon: '📜' },
-  { code: 'ENG_9',    name: 'English 9',        period: 1, color: '#2E7D5B', icon: '📚' }
+  { code: 'BIO_1',   name: 'Biology I',            period: 3, teacher: 'Smith',    color: '#2F6FDE', icon: '🧬' },
+  { code: 'ALG_1',   name: 'Algebra I',            period: 1, teacher: 'Erhart',   color: '#8A4FD6', icon: '📐' },
+  { code: 'BBL_FDN', name: 'Biblical Foundations', period: 2, teacher: 'Gambrell', color: '#C2703A', icon: '📖' },
+  { code: 'ENG_1',   name: 'English I',            period: 4, teacher: 'Piersant', color: '#2E7D5B', icon: '📚' },
+  { code: 'WLN_1',   name: 'Wellness',             period: 5, teacher: 'Craft',    color: '#D97706', icon: '🍎' }
 ];
 
-let activeClassCode = 'SCI_PHYS';
+const DEFAULT_PROFILE = `STUDENT: Mac (Age 14, 9th Grade)
+PROFILE: Auditory Dyslexia, Central Auditory Processing Disorder (CAPD), Inattentive ADHD with Cognitive Disengagement Syndrome (sluggish processing, mental depletion).
+READING CEILING: ~5th grade decoding vocabulary. Keep sentences short. Zero walls of text. Do NOT use childish tone; speak to him as a mature young adult.
+PASSIONS & ANALOGIES: Commercial Aviation (airline pilot dreams, cockpits, thrust/lift, flight levels), World War II history, Coding, Video games.
+STRATEGY: Break knowledge into 3-4 bullet chunks. Bold the first letters of key terms. When he asks a question, explain it using aerodynamics, a cockpit instrument, or game mechanics. End with an active-recall check question.`;
+
+const DEFAULT_SYSTEM_PROMPT = `You are a supportive, high-caliber study coach for a 9th-grade student named Mac.
+Follow the hidden student profile provided.
+Keep responses concise, clear, and punchy.
+Never lecture in long paragraphs. Use clear bullet points and bold anchor stems.
+Ground all science and math concepts in aviation, mechanics, coding, or gaming.`;
+
+let activeClassCode = 'BIO_1';
 let anchorBoldOn = true;
-let currentUnitIndex = 2; // Defaults to Unit 2
-let pickedLectures = { 11: true }; // Default to current lecture
+let currentUnitIndex = 2;
+let pickedLectures = { 11: true };
 let quizIndex = 0;
 let quizScore = 0;
 
-// Embedded Demo Unit Data (Provides immediate interaction out of the box)
+// Embedded Biology Unit 2 Data (Real curriculum for Mac's hardest class)
 let LECTURES = [
   {
-    id: 7, unitKey: 'U2', unitTitle: 'Unit 2 · Forces & Motion', w: 4, i: '🧭', d: 'Mon', n: 5, t: 'Force',
-    c: 'A force is a push or a pull that changes motion.',
-    bold_stem: 'Force',
-    analogy: 'Like applying pressure to a controller joystick: no push means no character movement.',
-    cue: 'Know contact vs non-contact forces', ts: '12:10',
-    q: ['A force is best defined as a…', ['Push or pull', 'Speed measurement', 'Color'], 0]
+    id: 7, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '🔋', d: 'Mon', n: 5, t: 'ATP Energy',
+    c: 'ATP is the rechargeable battery that powers every cell.',
+    bold_stem: 'ATP Molecule',
+    analogy: 'Like the battery pack on an aircraft cockpit radio—when charged, it delivers immediate power to vital systems.',
+    cue: 'ATP loses a phosphate to release energy (becomes ADP)', ts: '11:20',
+    q: ['What is the primary job of ATP in a living cell?', ['Store genetic code', 'Provide instant cellular energy', 'Build bones'], 1]
   },
   {
-    id: 8, unitKey: 'U2', unitTitle: 'Unit 2 · Forces & Motion', w: 4, i: '🚀', d: 'Tue', n: 6, t: 'Acceleration',
-    c: 'Acceleration is how quickly speed or direction changes.',
-    bold_stem: 'Acceleration',
-    analogy: 'Hitting the nitro boost in a racing game—it is not just high speed, it is how fast you gain speed.',
-    cue: 'F = m × a will be on the test', ts: '18:40',
-    q: ['Acceleration measures change in…', ['Mass', 'Speed or direction', 'Gravity only'], 1]
+    id: 8, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '🍃', d: 'Tue', n: 6, t: 'Chloroplasts',
+    c: 'Chloroplasts absorb sunlight to build glucose sugar in plants.',
+    bold_stem: 'Photosynthesis',
+    analogy: 'Solar panels mounted on an aircraft wing converting sunlight directly into electrical fuel.',
+    cue: 'Chlorophyll is the green pigment absorbing light', ts: '16:45',
+    q: ['What do chloroplasts convert sunlight into?', ['Protein', 'Chemical energy (Glucose)', 'Water'], 1]
   },
   {
-    id: 9, unitKey: 'U2', unitTitle: 'Unit 2 · Forces & Motion', w: 4, i: '⚖️', d: 'Wed', n: 7, t: 'Balance',
-    c: 'Balanced forces cancel out, causing zero change in motion.',
-    bold_stem: 'Balanced Forces',
-    analogy: 'Two players pushing against each other with equal strength—neither one moves.',
-    cue: 'Lab report due tomorrow', ts: '31:05',
-    q: ['When forces are balanced, an object…', ['Stops or stays at constant speed', 'Explodes', 'Spins faster'], 0]
+    id: 9, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '⚡', d: 'Wed', n: 7, t: 'Mitochondria',
+    c: 'Mitochondria break down glucose into ATP through cellular respiration.',
+    bold_stem: 'Cell Powerhouse',
+    analogy: 'The jet engine of the cell—it takes in fuel (sugar) and oxygen, combusting it to produce thrust (ATP).',
+    cue: 'Lab on yeast respiration due Thursday', ts: '28:10',
+    q: ['Which organelle acts as the cell’s jet engine to make ATP?', ['Mitochondria', 'Nucleus', 'Cell wall'], 0]
   },
   {
-    id: 10, unitKey: 'U2', unitTitle: 'Unit 2 · Forces & Motion', w: 4, i: '🍎', d: 'Thu', n: 8, t: 'Gravity',
-    c: 'Gravity pulls all objects toward the center of the Earth.',
-    bold_stem: 'Gravity',
-    analogy: 'The game boundary that keeps your character grounded so you do not float into space.',
-    cue: 'Mass never changes, weight does', ts: '09:15',
-    q: ['Gravity pulls objects toward…', ['The Moon', 'Earth’s center', 'The clouds'], 1]
+    id: 10, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '💨', d: 'Thu', n: 8, t: 'Aerobic vs Anaerobic',
+    c: 'Aerobic respiration requires oxygen; anaerobic operates without it.',
+    bold_stem: 'Oxygen Requirement',
+    analogy: 'Flying at normal cruise with twin jet engines (oxygen) vs. gliding on emergency battery power when engines flame out.',
+    cue: 'Lactic acid buildup happens without oxygen', ts: '08:30',
+    q: ['What does aerobic respiration require that anaerobic does not?', ['Water', 'Carbon', 'Oxygen'], 2]
   },
   {
-    id: 11, unitKey: 'U2', unitTitle: 'Unit 2 · Forces & Motion', w: 4, i: '🎯', d: 'Fri', n: 9, t: "Newton's Laws",
-    c: "Newton's 3 laws: inertia, F = m × a, and action-reaction.",
-    bold_stem: "Newton's Laws",
-    analogy: 'Inertia is like a heavy tank in a game—slow to get rolling, but once moving, almost impossible to stop.',
-    cue: 'Quiz on Laws 1–3 this Friday!', ts: '14:20',
-    q: ['Which law states: Every action has an equal and opposite reaction?', ['First Law', 'Second Law', 'Third Law'], 2]
+    id: 11, unitKey: 'U2', unitTitle: 'Unit 2 · Cells & Energy', w: 4, i: '🎯', d: 'Fri', n: 9, t: 'Cellular Respiration',
+    c: 'The complete chemical formula: Glucose + Oxygen = Carbon Dioxide + Water + ATP.',
+    bold_stem: 'Respiration Equation',
+    analogy: 'The complete flight envelope equation: Fuel + Air = Thrust + Exhaust gases.',
+    cue: 'Quiz on Cell Respiration and Photosynthesis this Friday!', ts: '14:20',
+    q: ['What are the two starting ingredients for cellular respiration?', ['Glucose and Oxygen', 'Sunlight and Carbon', 'Water and Salt'], 0]
   }
 ];
 
@@ -380,12 +420,8 @@ function openDB() {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = (e) => {
       const db = e.target.result;
-      if (!db.objectStoreNames.contains('chunks')) {
-        db.createObjectStore('chunks', { keyPath: 'id' });
-      }
-      if (!db.objectStoreNames.contains('lectures')) {
-        db.createObjectStore('lectures', { keyPath: 'clientId' });
-      }
+      if (!db.objectStoreNames.contains('chunks')) db.createObjectStore('chunks', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('lectures')) db.createObjectStore('lectures', { keyPath: 'clientId' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
@@ -428,59 +464,60 @@ function formatTimer(sec) {
 }
 
 async function startRecording() {
-  const stream = await navigator.mediaDevices.getUserMedia({
-    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
-  });
-  audioStream = stream;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+    });
+    audioStream = stream;
 
-  const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
-  mediaRecorder = new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 });
+    const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+    mediaRecorder = new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 });
 
-  const activeCls = CLASSES.find(c => c.code === activeClassCode);
-  const clientId = `rec_${Date.now()}_${activeClassCode}`;
-  
-  activeRecordingSession = {
-    clientId: clientId,
-    classCode: activeCls.code,
-    className: activeCls.name,
-    periodNumber: activeCls.period,
-    startedAt: new Date().toISOString(),
-    durationSeconds: 0,
-    status: 'recording',
-    chunksCount: 0
-  };
+    const activeCls = CLASSES.find(c => c.code === activeClassCode);
+    const clientId = `rec_${Date.now()}_${activeClassCode}`;
+    
+    activeRecordingSession = {
+      clientId: clientId,
+      classCode: activeCls.code,
+      className: activeCls.name,
+      periodNumber: activeCls.period,
+      startedAt: new Date().toISOString(),
+      durationSeconds: 0,
+      status: 'recording',
+      chunksCount: 0
+    };
 
-  let chunkSequence = 0;
-  mediaRecorder.ondataavailable = async (e) => {
-    if (e.data && e.data.size > 0) {
-      chunkSequence++;
-      activeRecordingSession.chunksCount = chunkSequence;
-      activeRecordingSession.durationSeconds = recordSeconds;
-      
-      // Commit audio slice immediately to IndexedDB
-      await idbPut('chunks', {
-        id: `${clientId}_chk_${chunkSequence}`,
-        sessionId: clientId,
-        seq: chunkSequence,
-        blob: e.data,
-        recordedAt: Date.now()
-      });
-      await idbPut('lectures', activeRecordingSession);
-    }
-  };
+    let chunkSequence = 0;
+    mediaRecorder.ondataavailable = async (e) => {
+      if (e.data && e.data.size > 0) {
+        chunkSequence++;
+        activeRecordingSession.chunksCount = chunkSequence;
+        activeRecordingSession.durationSeconds = recordSeconds;
+        
+        await idbPut('chunks', {
+          id: `${clientId}_chk_${chunkSequence}`,
+          sessionId: clientId,
+          seq: chunkSequence,
+          blob: e.data,
+          recordedAt: Date.now()
+        });
+        await idbPut('lectures', activeRecordingSession);
+      }
+    };
 
-  // 10-second sliced chunking: prevents loss on battery drain or sudden lid closure
-  mediaRecorder.start(10000);
-  
-  recordSeconds = 0;
-  timerInterval = setInterval(() => {
-    recordSeconds++;
-    document.getElementById('recTimer').textContent = `${formatTimer(recordSeconds)} · saved on this Chromebook`;
-  }, 1000);
+    mediaRecorder.start(10000);
+    recordSeconds = 0;
+    timerInterval = setInterval(() => {
+      recordSeconds++;
+      document.getElementById('recTimer').textContent = `${formatTimer(recordSeconds)} · saved on this Chromebook`;
+    }, 1000);
 
-  document.getElementById('recBtn').classList.add('on');
-  document.getElementById('recBtn').textContent = '■ Stop';
-  document.getElementById('recScheduleHint').textContent = `Recording ${activeCls.name} (Period ${activeCls.period})…`;
+    document.getElementById('recBtn').classList.add('on');
+    document.getElementById('recBtn').textContent = '■ Stop';
+    document.getElementById('recScheduleHint').textContent = `Recording ${activeCls.name} (Period ${activeCls.period})…`;
+  } catch (err) {
+    alert('Microphone access denied: ' + err.message);
+  }
 }
 
 async function stopRecording() {
@@ -496,15 +533,14 @@ async function stopRecording() {
 
   document.getElementById('recBtn').classList.remove('on');
   document.getElementById('recBtn').textContent = '● Record';
-  document.getElementById('recScheduleHint').textContent = 'Saved to Chromebook ✅ Waiting for Home Wi-Fi.';
+  document.getElementById('recScheduleHint').textContent = 'Saved safely ✅ Ready for Home Wi-Fi processing.';
   showToast('Class recorded safely to Chromebook storage!');
   updateQueueUI();
 }
 
-// Clean Lid-Close / Visibility Listener: flushes audio before Chromebook sleep
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden' && mediaRecorder && mediaRecorder.state === 'recording') {
-    mediaRecorder.requestData(); // Force slice dump to IndexedDB
+    mediaRecorder.requestData();
   }
 });
 
@@ -513,7 +549,6 @@ document.addEventListener('visibilitychange', () => {
    ===================================================================== */
 function applyBionic(text) {
   if (!anchorBoldOn || !text) return text;
-  // Bolds first 1-3 letters of words longer than 2 characters
   return text.replace(/\b([a-zA-Z]{1,3})([a-zA-Z]+)?\b/g, (m, stem, rest) => `<b>${stem}</b>${rest || ''}`);
 }
 
@@ -555,7 +590,7 @@ function renderScopeHeader() {
   const selected = getSelectedLectures();
   const isArena = selected.length > 1;
   const h = `
-    <span class="mode-pill">${isArena ? '⚔️ Exam Arena' : '📖 Daily Desk'}</span>
+    <span class="mode-pill">${isArena ? '⚔️ Exam Flight Deck' : '📖 Flight Plan'}</span>
     ${selected.map(l => `<span>${l.i}</span>`).join('')}
     <span><b>${selected.length}</b> ${selected.length === 1 ? 'part' : 'parts combined'}</span>
     <button class="say" data-go="cls" style="margin-left:auto">Change</button>
@@ -590,14 +625,14 @@ function renderUnitTrack() {
   const count = getSelectedLectures().length;
   const pickBar = document.getElementById('pickBar');
   pickBar.style.display = (count > 0 && document.getElementById('s-cls').classList.contains('on')) ? 'flex' : 'none';
-  document.getElementById('pickCountLbl').textContent = `✅ ${count} ${count === 1 ? 'lecture' : 'lectures'} selected`;
+  document.getElementById('pickCountLbl').textContent = `✅ ${count} ${count === 1 ? 'part' : 'parts'} selected`;
 }
 
 function renderStudyGuide() {
   const selected = getSelectedLectures();
   const container = document.getElementById('guideContent');
   if (!selected.length) {
-    container.innerHTML = '<div class="card center"><p>Pick a lecture on the Unit Map to read study notes 🗺️</p></div>';
+    container.innerHTML = '<div class="card center"><p>Pick a flight level on the Unit Map to read study notes 🗺️</p></div>';
     return;
   }
 
@@ -613,7 +648,7 @@ function renderStudyGuide() {
       </ul>
     </div>
     <div class="card" style="border-color:var(--c)">
-      <h3>🎮 Real-World &amp; Gaming Analogy <button class="say" onclick="speakText(this.parentElement.nextElementSibling.textContent)">🔊 Read</button></h3>
+      <h3>✈️ Cockpit &amp; Real-World Analogy <button class="say" onclick="speakText(this.parentElement.nextElementSibling.textContent)">🔊 Read</button></h3>
       <p>${applyBionic(selected[selected.length - 1].analogy)}</p>
     </div>
   `;
@@ -632,7 +667,7 @@ function renderStudyGuide() {
 
   html += `
     <div class="chips">
-      <button class="btn" data-go="chat">💬 Ask Coach About These</button>
+      <button class="btn" data-go="chat">💬 Ask Flight Coach</button>
       <button class="btn alt" data-go="quiz">🎮 Start Practice Quest</button>
     </div>
   `;
@@ -642,29 +677,31 @@ function renderStudyGuide() {
 function renderChat() {
   const selected = getSelectedLectures();
   const feed = document.getElementById('chatFeed');
-  feed.innerHTML = `
-    <div class="msg ai">
-      <button class="say" style="float:right" onclick="speakText(this.parentElement.textContent)">🔊</button>
-      Hi! I am your <b>${CLASSES.find(c => c.code === activeClassCode).name}</b> study coach. Ask me anything about ${selected.length > 1 ? 'your combined unit notes' : 'today\'s class'}, or tap one of the ideas below!
-    </div>
-  `;
+  if (!feed.children.length) {
+    feed.innerHTML = `
+      <div class="msg ai">
+        <button class="say" style="float:right" onclick="speakText(this.parentElement.textContent)">🔊</button>
+        Pilot Mac, I am your <b>${CLASSES.find(c => c.code === activeClassCode).name}</b> flight coach. Ask me anything about ${selected.length > 1 ? 'your combined unit notes' : 'today\'s class'}, or tap an idea below!
+      </div>
+    `;
+  }
 }
 
 function renderQuiz() {
   const selected = getSelectedLectures();
   const container = document.getElementById('quizContent');
   if (!selected.length) {
-    container.innerHTML = '<div class="card center"><p>Pick lectures on the Unit Map first 🗺️</p></div>';
+    container.innerHTML = '<div class="card center"><p>Pick parts on the Unit Map first 🗺️</p></div>';
     return;
   }
 
   if (quizIndex >= selected.length) {
     container.innerHTML = `
       <div class="card center">
-        <h2>🏆 Quest Complete!</h2>
-        <p style="font-size:22px;font-weight:700;color:var(--ok)">Score: ${quizScore} / ${selected.length}</p>
-        <p>Great job reviewing your concepts. Any missed questions have been saved to your practice pile.</p>
-        <button class="btn" id="retryQuizBtn">Play Again</button>
+        <h2>🏆 Mission Complete!</h2>
+        <p style="font-size:24px;font-weight:700;color:var(--ok)">Score: ${quizScore} / ${selected.length}</p>
+        <p>Excellent flight prep. Missed questions stay in your practice queue for immediate retake.</p>
+        <button class="btn" id="retryQuizBtn">Fly Again (Retake)</button>
       </div>
     `;
     document.getElementById('retryQuizBtn').onclick = () => { quizIndex = 0; quizScore = 0; renderQuiz(); };
@@ -674,7 +711,7 @@ function renderQuiz() {
   const cur = selected[quizIndex];
   container.innerHTML = `
     <div class="row">
-      <b>Question ${quizIndex + 1} of ${selected.length}</b>
+      <b>Flight Check ${quizIndex + 1} of ${selected.length}</b>
       <span class="badge">${cur.i} Part ${cur.id - 6}</span>
     </div>
     <div class="progress-bar"><i style="width:${(quizIndex / selected.length) * 100}%"></i></div>
@@ -693,9 +730,9 @@ function renderQuiz() {
       const fb = document.getElementById('quizFeedback');
       if (isCorrect) {
         quizScore++;
-        fb.innerHTML = '🎉 That is correct!';
+        fb.innerHTML = '🎉 Systems Nominal! Correct.';
       } else {
-        fb.innerHTML = `Not quite! Correct: <b>${cur.q[1][cur.q[2]]}</b> <span class="badge">🔊 Hear at ${cur.ts}</span>`;
+        fb.innerHTML = `Check instruments! Correct: <b>${cur.q[1][cur.q[2]]}</b> <span class="badge">🔊 Hear at ${cur.ts}</span>`;
       }
       setTimeout(() => { quizIndex++; renderQuiz(); }, 2200);
     };
@@ -710,7 +747,7 @@ function renderAll() {
   renderQuiz();
 }
 
-/* Navigation Screen Router */
+/* Screen Router */
 function navigateTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
   document.querySelectorAll('nav.dock button').forEach(b => b.classList.remove('on'));
@@ -721,7 +758,6 @@ function navigateTo(screenId) {
   const dockBtn = document.querySelector(`nav.dock button[data-go="${screenId}"]`);
   if (dockBtn) dockBtn.classList.add('on');
   
-  // Responsive dual-pane layout for wide Chromebook screens
   const isWide = window.innerWidth >= 1020 && (screenId === 'guide' || screenId === 'chat' || screenId === 'quiz');
   document.getElementById('mainWrap').classList.toggle('two', isWide);
   if (isWide && screenId === 'guide') {
@@ -731,8 +767,201 @@ function navigateTo(screenId) {
   renderAll();
 }
 
+// Global Delegated Click Listener: guarantees dynamic elements like "Change" always work
+document.addEventListener('click', (e) => {
+  const g = e.target.closest('[data-go]');
+  if (g) {
+    e.preventDefault();
+    navigateTo(g.dataset.go);
+  }
+});
+
 /* =====================================================================
-   SECTION 6 - BATCH AI PROCESSOR & CLIENT-SIDE AUDIO SLICER
+   SECTION 6 - LIVE AI CHAT & SPEECH-TO-TEXT WITH GROUNDING
+   ===================================================================== */
+async function sendChatMessage(query) {
+  const text = query || document.getElementById('chatInput').value.trim();
+  if (!text) return;
+  document.getElementById('chatInput').value = '';
+
+  const feed = document.getElementById('chatFeed');
+  feed.innerHTML += `<div class="msg me">${text}</div>`;
+  feed.scrollTop = feed.scrollHeight;
+
+  const key = localStorage.getItem('ss_gemini_key') || '';
+  if (!key) {
+    feed.innerHTML += `<div class="msg ai"><span style="color:var(--bad)">⚠️ Please ask a parent to enter the Gemini API Key under Settings (⚙️).</span></div>`;
+    feed.scrollTop = feed.scrollHeight;
+    return;
+  }
+
+  const model = localStorage.getItem('ss_gemini_model') || 'gemini-2.5-flash';
+  const hiddenProfile = localStorage.getItem('ss_hidden_profile') || DEFAULT_PROFILE;
+  const sysInst = localStorage.getItem('ss_master_prompt') || DEFAULT_SYSTEM_PROMPT;
+
+  const activeNotes = getSelectedLectures().map(l => `${l.t}: ${l.c} (Analogy: ${l.analogy})`).join('\n');
+  const fullPrompt = `${sysInst}\n\n[STUDENT COGNITIVE PROFILE]\n${hiddenProfile}\n\n[CLASS STUDY NOTES]\n${activeNotes}\n\n[STUDENT QUESTION]\n${text}`;
+
+  feed.innerHTML += `<div class="msg ai" id="thinkingMsg">Flight Coach is calculating…</div>`;
+  feed.scrollTop = feed.scrollHeight;
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${key}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 600 }
+      })
+    });
+    const data = await res.json();
+    document.getElementById('thinkingMsg')?.remove();
+
+    if (!res.ok) throw new Error(data.error?.message || 'Gemini error');
+    const answer = data.candidates[0].content.parts[0].text;
+    
+    feed.innerHTML += `
+      <div class="msg ai">
+        <button class="say" style="float:right" onclick="speakText(this.parentElement.textContent)">🔊</button>
+        ${applyBionic(answer)}
+      </div>
+    `;
+    feed.scrollTop = feed.scrollHeight;
+  } catch (err) {
+    document.getElementById('thinkingMsg')?.remove();
+    feed.innerHTML += `<div class="msg ai"><span style="color:var(--bad)">Radio static: ${err.message}</span></div>`;
+    feed.scrollTop = feed.scrollHeight;
+  }
+}
+
+document.getElementById('chatSendBtn').addEventListener('click', () => sendChatMessage());
+document.getElementById('chatInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') sendChatMessage();
+});
+
+// Speech Recognition for Chat Microphone
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SR) {
+  const reco = new SR();
+  reco.lang = 'en-US';
+  reco.interimResults = false;
+  
+  reco.onresult = (e) => {
+    const spoken = e.results[0][0].transcript;
+    document.getElementById('chatInput').value = spoken;
+    document.getElementById('chatMicBtn').textContent = '🎤 Speak';
+    sendChatMessage(spoken);
+  };
+  reco.onerror = () => { document.getElementById('chatMicBtn').textContent = '🎤 Speak'; };
+  reco.onend = () => { document.getElementById('chatMicBtn').textContent = '🎤 Speak'; };
+
+  document.getElementById('chatMicBtn').addEventListener('click', () => {
+    document.getElementById('chatMicBtn').textContent = '🔴 Listening…';
+    reco.start();
+  });
+} else {
+  document.getElementById('chatMicBtn').style.display = 'none';
+}
+
+// Sample question chips automatically send query
+document.addEventListener('click', (e) => {
+  const sq = e.target.closest('.sample-q');
+  if (sq) sendChatMessage(sq.textContent.trim());
+});
+
+/* =====================================================================
+   SECTION 7 - GEMINI MODEL TESTER & PARENT PIN GATE
+   ===================================================================== */
+const PARENT_PIN_KEY = 'ss_parent_pin';
+function getParentPin() { return localStorage.getItem(PARENT_PIN_KEY) || '1971'; }
+
+document.getElementById('openCfgBtn').addEventListener('click', () => {
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinDlg').showModal();
+});
+document.getElementById('closePinBtn').addEventListener('click', () => document.getElementById('pinDlg').close());
+
+document.getElementById('submitPinBtn').addEventListener('click', () => {
+  const entered = document.getElementById('pinInput').value.trim();
+  if (entered === getParentPin()) {
+    document.getElementById('pinDlg').close();
+    openParentVault();
+  } else {
+    document.getElementById('pinError').style.display = 'block';
+  }
+});
+
+function openParentVault() {
+  document.getElementById('geminiApiKey').value = localStorage.getItem('ss_gemini_key') || '';
+  document.getElementById('hiddenProfileText').value = localStorage.getItem('ss_hidden_profile') || DEFAULT_PROFILE;
+  document.getElementById('masterSystemPrompt').value = localStorage.getItem('ss_master_prompt') || DEFAULT_SYSTEM_PROMPT;
+  document.getElementById('cfgNewPin').value = getParentPin();
+  
+  const savedModel = localStorage.getItem('ss_gemini_model') || 'gemini-2.5-flash';
+  const sel = document.getElementById('geminiModelSelect');
+  if (!sel.options.length) {
+    const opt = document.createElement('option');
+    opt.value = savedModel; opt.textContent = savedModel;
+    sel.appendChild(opt);
+  }
+  document.getElementById('cfgDlg').showModal();
+}
+
+document.getElementById('closeCfgBtn').addEventListener('click', () => document.getElementById('cfgDlg').close());
+
+// Test Gemini Key & Load Models (from Sermon Scribe)
+document.getElementById('testGeminiBtn').addEventListener('click', async () => {
+  const k = document.getElementById('geminiApiKey').value.trim();
+  const badge = document.getElementById('geminiStatusBadge');
+  if (!k) { alert('Paste Gemini key first'); return; }
+
+  badge.textContent = 'Contacting AI Studio…';
+  try {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${k}`);
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error?.message || 'Key failed');
+
+    const names = (d.models || [])
+      .filter(m => /gemini/i.test(m.name) && (m.supportedGenerationMethods || []).includes('generateContent'))
+      .map(m => m.name.replace(/^models\//, ''))
+      .sort().reverse();
+
+    const sel = document.getElementById('geminiModelSelect');
+    sel.innerHTML = '';
+    names.forEach(n => {
+      const o = document.createElement('option');
+      o.value = n; o.textContent = n;
+      sel.appendChild(o);
+    });
+
+    if (names.includes('gemini-2.5-flash')) sel.value = 'gemini-2.5-flash';
+    else if (names.includes('gemini-1.5-flash')) sel.value = 'gemini-1.5-flash';
+
+    badge.textContent = `✓ Connected! ${names.length} models loaded.`;
+    showToast('Gemini API verified successfully!');
+  } catch (err) {
+    badge.textContent = '❌ Failed: ' + err.message;
+    alert('Verification failed: ' + err.message);
+  }
+});
+
+document.getElementById('saveCfgBtn').addEventListener('click', () => {
+  localStorage.setItem('ss_gemini_key', document.getElementById('geminiApiKey').value.trim());
+  localStorage.setItem('ss_gemini_model', document.getElementById('geminiModelSelect').value);
+  localStorage.setItem('ss_hidden_profile', document.getElementById('hiddenProfileText').value);
+  localStorage.setItem('ss_master_prompt', document.getElementById('masterSystemPrompt').value);
+  localStorage.setItem('ss_tts_rate', document.getElementById('cfgTtsRate').value);
+  
+  const newPin = document.getElementById('cfgNewPin').value.trim();
+  if (newPin.length === 4) localStorage.setItem(PARENT_PIN_KEY, newPin);
+
+  document.getElementById('cfgDlg').close();
+  showToast('Parent vault settings saved!');
+});
+
+/* =====================================================================
+   SECTION 8 - INITIALIZATION & QUEUE UI
    ===================================================================== */
 async function updateQueueUI() {
   const list = await idbGetAll('lectures');
@@ -742,73 +971,6 @@ async function updateQueueUI() {
     : 'All saved lectures have been transcribed and prepared.';
 }
 
-document.getElementById('batchProcessBtn').addEventListener('click', async () => {
-  const list = await idbGetAll('lectures');
-  const pending = list.filter(l => l.status === 'ready_for_processing');
-  if (!pending.length) {
-    showToast('No pending lectures to process.');
-    return;
-  }
-
-  const apiKey = localStorage.getItem('ss_gemini_key') || '';
-  if (!apiKey && localStorage.getItem('ss_provider') !== 'azure') {
-    document.getElementById('cfgDlg').showModal();
-    alert('Please enter your Google Gemini API Key in Settings first.');
-    return;
-  }
-
-  showToast(`Processing ${pending.length} lecture(s) with AI...`);
-  // Mark local records processed
-  for (const item of pending) {
-    item.status = 'completed';
-    await idbPut('lectures', item);
-  }
-  updateQueueUI();
-  showToast('Study guides, analogies & quizzes generated!');
-});
-
-/* =====================================================================
-   SECTION 7 - MICROSOFT GRAPH SHAREPOINT SYNC (STUDENT LISTS)
-   ===================================================================== */
-let msalClient = null;
-const MSAL_CONFIG = {
-  auth: {
-    clientId: localStorage.getItem('ss_sp_client_id') || 'bc4efc91-8b56-4f59-bf0e-f42e4724e2f6',
-    authority: localStorage.getItem('ss_sp_authority') || 'https://login.microsoftonline.com/daa6322e-b4e5-415c-8cc7-258c866f29d7',
-    redirectUri: window.location.href.split('?')[0].split('#')[0]
-  },
-  cache: { cacheLocation: 'localStorage' }
-};
-
-function getMsal() {
-  if (!msalClient && window.msal) {
-    msalClient = new msal.PublicClientApplication(MSAL_CONFIG);
-  }
-  return msalClient;
-}
-
-document.getElementById('msSignInBtn').addEventListener('click', async () => {
-  try {
-    const client = getMsal();
-    const login = await client.loginPopup({ scopes: ['User.Read', 'Sites.ReadWrite.All'] });
-    document.getElementById('msUserBadge').textContent = `Signed in: ${login.account.username}`;
-    showToast('Signed in to Microsoft 365!');
-  } catch (err) {
-    alert(`Sign-in error: ${err.message}`);
-  }
-});
-
-document.getElementById('spSyncBtn').addEventListener('click', async () => {
-  showToast('Syncing Student_Lectures & Student_Deadlines...');
-  // Simulates Microsoft Graph List PATCH via idempotency key ClientId
-  setTimeout(() => {
-    showToast('SharePoint synchronized successfully!');
-  }, 1200);
-});
-
-/* =====================================================================
-   SECTION 8 - EVENT BINDINGS & APP INITIALIZATION
-   ===================================================================== */
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -816,14 +978,12 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-// Bionic Anchor Bold Toggle
 document.getElementById('ancBtn').addEventListener('click', function() {
   anchorBoldOn = !anchorBoldOn;
   this.textContent = `Aa Anchor bold: ${anchorBoldOn ? 'On' : 'Off'}`;
   renderAll();
 });
 
-// Color Theme Pickers
 document.querySelectorAll('.tints button').forEach(b => {
   b.addEventListener('click', () => {
     document.documentElement.dataset.t = b.dataset.t;
@@ -831,16 +991,13 @@ document.querySelectorAll('.tints button').forEach(b => {
   });
 });
 
-// Navigation Dock Events
-document.querySelectorAll('[data-go]').forEach(b => {
+document.querySelectorAll('nav.dock button').forEach(b => {
   b.addEventListener('click', () => navigateTo(b.dataset.go));
 });
 
-// Unit Select Buttons
 document.getElementById('prevUnitBtn').onclick = () => { currentUnitIndex = 1; renderAll(); };
 document.getElementById('nextUnitBtn').onclick = () => { currentUnitIndex = 2; renderAll(); };
 
-// Quick Selection Chips
 document.querySelectorAll('[data-q]').forEach(btn => {
   btn.onclick = () => {
     const q = btn.dataset.q;
@@ -855,36 +1012,32 @@ document.querySelectorAll('[data-q]').forEach(btn => {
   };
 });
 
-// Record Button Click
 document.getElementById('recBtn').addEventListener('click', () => {
-  if (mediaRecorder && mediaRecorder.state === 'recording') {
-    stopRecording();
-  } else {
-    startRecording();
-  }
+  if (mediaRecorder && mediaRecorder.state === 'recording') stopRecording();
+  else startRecording();
 });
 
-// Settings Modal Handlers
-document.getElementById('openCfgBtn').onclick = () => document.getElementById('cfgDlg').showModal();
-document.getElementById('closeCfgBtn').onclick = () => document.getElementById('cfgDlg').close();
-document.getElementById('cfgProvider').onchange = (e) => {
-  document.getElementById('geminiBox').style.display = e.target.value === 'gemini' ? 'block' : 'none';
-  document.getElementById('azureBox').style.display = e.target.value === 'azure' ? 'block' : 'none';
-};
+// Batch AI Processing simulation / execution
+document.getElementById('batchProcessBtn').addEventListener('click', async () => {
+  const list = await idbGetAll('lectures');
+  const pending = list.filter(l => l.status === 'ready_for_processing');
+  if (!pending.length) {
+    showToast('No pending recordings waiting.');
+    return;
+  }
+  showToast(`Processing ${pending.length} lecture(s) with AI…`);
+  for (const item of pending) {
+    item.status = 'completed';
+    await idbPut('lectures', item);
+  }
+  updateQueueUI();
+  showToast('Study guides, analogies & flight checks generated!');
+});
 
-document.getElementById('saveCfgBtn').onclick = () => {
-  localStorage.setItem('ss_provider', document.getElementById('cfgProvider').value);
-  localStorage.setItem('ss_gemini_key', document.getElementById('geminiApiKey').value);
-  localStorage.setItem('ss_tts_rate', document.getElementById('cfgTtsRate').value);
-  document.getElementById('cfgDlg').close();
-  showToast('Settings saved!');
-};
-
-// Initial App Boot
+// App Startup
 (function init() {
   const savedTheme = localStorage.getItem('ss_theme');
   if (savedTheme) document.documentElement.dataset.t = savedTheme;
-  
   renderClassRibbon();
   renderAll();
   updateQueueUI();
