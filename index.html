@@ -18,7 +18,17 @@
 }
 :root[data-t="peach"] { --bg: #FCE8DE; --card: #FFF6F1; --line: #EFCFBF; --sel: #FBD9C6; }
 :root[data-t="blue"]  { --bg: #E3E9EF; --card: #F2F5F8; --line: #C9D3DD; --sel: #CBD9EA; }
-:root[data-t="dark"]  { --bg: #1E1E1E; --card: #2A2A2E; --ink: #EDEBE4; --mut: #A9ADBD; --line: #44444C; --acc: #7EA8FF; --sel: #33405E; }
+:root {
+  --ok-bg: #E6F4EA; --no-bg: #FCE8E6;
+  --warn-bg: #FEF3C7; --warn-line: #FCD34D; --warn-ink: #92400E;
+  --good-bg: #D1FAE5; --good-line: #6EE7B7; --good-ink: #065F46;
+  --err-bg: #FDECEF; --err-line: #F8B4B4; --err-ink: #9B1C1C;
+}
+:root[data-t="dark"]  { --bg: #1E1E1E; --card: #2A2A2E; --ink: #EDEBE4; --mut: #A9ADBD; --line: #44444C; --acc: #7EA8FF; --sel: #33405E;
+  --ok-bg: #1F3A2C; --no-bg: #4A2520;
+  --warn-bg: #3D3214; --warn-line: #8A6D1F; --warn-ink: #F5D88A;
+  --good-bg: #173A2C; --good-line: #2E7D5B; --good-ink: #A7F3D0;
+  --err-bg: #44232A; --err-line: #8B3A44; --err-ink: #FBC4C4; }
 
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
@@ -79,8 +89,8 @@ main { padding: 4px 18px 140px; flex: 1; }
 .rec:hover { transform: scale(1.04); }
 .rec.on { background: var(--bad); animation: pulse 1.6s infinite; }
 @keyframes pulse { 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.05); box-shadow: 0 0 28px rgba(194,84,58,.5); } }
-.banner { background: #FEF3C7; border: 1.5px solid #FCD34D; color: #92400E; border-radius: 14px; padding: 12px 16px; font-size: 14px; margin: 12px 0; font-weight: 500; }
-.banner.ok { background: #D1FAE5; border-color: #6EE7B7; color: #065F46; }
+.banner { background: var(--warn-bg); border: 1.5px solid var(--warn-line); color: var(--warn-ink); border-radius: 14px; padding: 12px 16px; font-size: 14px; margin: 12px 0; font-weight: 500; }
+.banner.ok { background: var(--good-bg); border-color: var(--good-line); color: var(--good-ink); }
 
 /* Timeline & Level Select Track */
 .track { display: flex; gap: 12px; overflow-x: auto; padding: 8px 4px 14px; scroll-snap-type: x mandatory; }
@@ -105,10 +115,13 @@ main { padding: 4px 18px 140px; flex: 1; }
 .msg { padding: 12px 16px; border-radius: 16px; margin: 10px 0; max-width: 90%; }
 .msg.me { background: var(--c); color: #fff; margin-left: auto; }
 .msg.ai { background: var(--card); border: 1.5px solid var(--line); }
-.msg.err { background: #FDECEF; border: 1.5px solid #F8B4B4; color: #9B1C1C; }
+.msg.err { background: var(--err-bg); border: 1.5px solid var(--err-line); color: var(--err-ink); }
 .opt { display: block; width: 100%; text-align: left; margin: 10px 0; border: 2px solid var(--line); background: var(--card); border-radius: 14px; padding: 14px; cursor: pointer; min-height: 58px; font-weight: 500; transition: border-color .15s; }
-.opt.ok { border-color: var(--ok); background: #E6F4EA; }
-.opt.no { border-color: var(--bad); background: #FCE8E6; }
+.opt.ok { border-color: var(--ok); background: var(--ok-bg); }
+.opt.no { border-color: var(--bad); background: var(--no-bg); }
+.cls:disabled { opacity: .5; cursor: not-allowed; }
+.md h2, .md h3, .md h4 { font-size: 16px; margin: 10px 0 4px; color: var(--c); }
+.md p { margin: 6px 0; }
 .opt:disabled { cursor: default; }
 .progress-bar { height: 14px; border-radius: 999px; background: var(--line); overflow: hidden; margin: 8px 0 16px; }
 .progress-bar i { display: block; height: 100%; background: var(--ok); transition: width .3s ease; }
@@ -171,7 +184,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
     <section class="screen on" id="s-rec">
       <p class="center" id="recScheduleHint" style="font-weight:600;font-size:18px"></p>
       <div class="banner ok center" id="safeBanner">
-        🔒 Audio saves safely every 10 seconds. Closing the laptop lid during class will not lose your notes.
+        🔒 Audio saves every 10 seconds, so a crash or closed tab keeps what was already recorded. Keep the lid open: a closed lid pauses the microphone.
       </div>
 
       <div class="rec-wrap">
@@ -193,9 +206,9 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
     <section class="screen" id="s-cls">
       <div class="chips">
         <button class="btn alt" data-q="today">🎯 Just today</button>
-        <button class="btn alt" data-q="unit">🗺️ This unit</button>
-        <button class="btn alt" data-q="test">📝 Next test</button>
-        <button class="btn alt" data-q="all">🔁 All parts</button>
+        <button class="btn alt" data-q="test">📝 Last 2 parts</button>
+        <button class="btn alt" data-q="unit">🗺️ Whole unit</button>
+        <button class="btn alt" data-q="none">✕ Clear</button>
       </div>
       <div class="wk">
         <button id="prevUnitBtn" aria-label="Previous unit">◀</button>
@@ -291,7 +304,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
   </div>
   <div class="dlg-body" style="text-align:center">
     <p style="font-size:14px;color:var(--mut);margin:0">Enter 4-digit PIN to access cloud &amp; learner settings:</p>
-    <input type="password" id="pinInput" maxlength="4" placeholder="••••" style="font-size:28px;text-align:center;letter-spacing:.3em;width:140px;margin:10px auto">
+    <input type="password" id="pinInput" maxlength="4" inputmode="numeric" placeholder="••••" style="font-size:28px;text-align:center;letter-spacing:.3em;width:140px;margin:10px auto">
     <p id="pinError" style="color:var(--bad);font-size:13px;display:none">Incorrect PIN. Try again.</p>
   </div>
   <div class="dlg-foot">
@@ -379,7 +392,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
 
     <h4>Security &amp; TTS Settings</h4>
     <label>Change Parent PIN
-      <input type="password" id="cfgNewPin" maxlength="4" value="1971" style="width:120px">
+      <input type="password" id="cfgNewPin" maxlength="4" inputmode="numeric" style="width:120px">
     </label>
     <label>Read Aloud (TTS) Speed
       <select id="cfgTtsRate">
@@ -549,6 +562,8 @@ let anchorBoldOn = false; // Defaulted to OFF based on research feedback
 let pickedLectures = {};
 let quizIndex = 0;
 let quizScore = 0;
+let quizMissed = [];      // lecture ids missed in the current run
+let quizRetryIds = null;  // when set, the drill only covers these lecture ids
 let stagedPdfBase64 = null;
 let stagedPdfName = null;
 let currentChatHistory = []; // Multi-turn memory
@@ -619,6 +634,21 @@ async function startRecording() {
     });
     audioStream = stream;
 
+    // Ask Chrome not to evict IndexedDB under storage pressure
+    if (navigator.storage && navigator.storage.persist) {
+      try { await navigator.storage.persist(); } catch(e){}
+    }
+
+    // If the mic drops (headset unplugged, device suspends), stop cleanly instead of showing a stuck "recording" state
+    stream.getAudioTracks().forEach(t => {
+      t.onended = () => {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+          showToast('Microphone stopped. Recording saved up to this point.');
+          stopRecording();
+        }
+      };
+    });
+
     if ('wakeLock' in navigator) {
       try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
     }
@@ -644,11 +674,12 @@ async function startRecording() {
     const sessionTargetId = clientId;
 
     mediaRecorder.ondataavailable = async (e) => {
-      // Guard against late chunks after stop
-      if (e.data && e.data.size > 0 && activeRecordingSession && activeRecordingSession.clientId === sessionTargetId) {
+      // Only write chunks that belong to this session (the final chunk on stop is kept)
+      const sess = activeRecordingSession;
+      if (e.data && e.data.size > 0 && sess && sess.clientId === sessionTargetId) {
         chunkSequence++;
-        activeRecordingSession.chunksCount = chunkSequence;
-        activeRecordingSession.durationSeconds = recordSeconds;
+        sess.chunksCount = chunkSequence;
+        sess.durationSeconds = Math.max(sess.durationSeconds || 0, recordSeconds);
         
         await idbPut('chunks', {
           id: `${sessionTargetId}_chk_${chunkSequence}`,
@@ -657,7 +688,7 @@ async function startRecording() {
           blob: e.data,
           recordedAt: Date.now()
         });
-        await idbPut('lectures', activeRecordingSession);
+        await idbPut('lectures', sess);
       }
     };
 
@@ -671,25 +702,33 @@ async function startRecording() {
     document.getElementById('recBtn').classList.add('on');
     document.getElementById('recBtn').textContent = '■ Stop';
     document.getElementById('recScheduleHint').textContent = `Recording ${activeCls.name} (Period ${activeCls.period})…`;
+    renderClassRibbon();
   } catch (err) {
     alert('Microphone access denied: ' + err.message);
   }
 }
 
 async function stopRecording() {
-  if (!mediaRecorder) return;
+  if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
+  const rec = mediaRecorder;
   clearInterval(timerInterval);
   if (wakeLock) { try { await wakeLock.release(); wakeLock = null; } catch(e){} }
 
-  mediaRecorder.stop();
-  audioStream.getTracks().forEach(t => t.stop());
+  // Wait for the final chunk to be flushed before marking the lecture ready
+  await new Promise(resolve => {
+    rec.addEventListener('stop', () => setTimeout(resolve, 150), { once: true });
+    rec.stop();
+  });
+  audioStream.getTracks().forEach(t => { t.onended = null; t.stop(); });
   mediaRecorder = null;
 
   if (activeRecordingSession) {
     activeRecordingSession.status = 'ready_for_processing';
     activeRecordingSession.durationSeconds = recordSeconds;
     await idbPut('lectures', activeRecordingSession);
+    activeRecordingSession = null;
   }
+  renderClassRibbon();
 
   document.getElementById('recBtn').classList.remove('on');
   document.getElementById('recBtn').textContent = '● Record';
@@ -707,49 +746,109 @@ document.addEventListener('visibilitychange', () => {
 /* =====================================================================
    SECTION 4 - CLEAN MARKDOWN, BIONIC FORMATTING & ACCURATE TTS
    ===================================================================== */
+function escText(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function mdInline(t) {
+  return escText(t)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*])\*(?!\s)(.+?)\*(?!\*)/g, '$1<em>$2</em>');
+}
+
+// Line-based Markdown: headings, bullet and numbered lists, bold, italic, paragraphs, line breaks
 function mdToHtml(md) {
   if (!md) return '';
-  let s = md
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^\s*[-*]\s+(.*)$/gm, '<li>$1</li>');
-  
-  if (s.indexOf('<li>') > -1) {
-    s = s.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+  const lines = String(md).replace(/\r\n/g, '\n').split('\n');
+  const out = [];
+  let list = null;   // 'ul' | 'ol' | null
+  let para = [];
+  const flushPara = () => { if (para.length) { out.push('<p>' + para.join('<br>') + '</p>'); para = []; } };
+  const closeList = () => { if (list) { out.push(`</${list}>`); list = null; } };
+
+  for (const raw of lines) {
+    const line = raw.trimEnd();
+    let m;
+    if (!line.trim()) { flushPara(); closeList(); continue; }
+    if ((m = line.match(/^\s*(#{1,4})\s+(.*)$/))) {
+      flushPara(); closeList();
+      const lvl = Math.min(m[1].length + 1, 4);
+      out.push(`<h${lvl}>${mdInline(m[2])}</h${lvl}>`);
+    } else if ((m = line.match(/^\s*[-*•]\s+(.*)$/))) {
+      flushPara();
+      if (list !== 'ul') { closeList(); out.push('<ul>'); list = 'ul'; }
+      out.push(`<li>${mdInline(m[1])}</li>`);
+    } else if ((m = line.match(/^\s*\d+[.)]\s+(.*)$/))) {
+      flushPara();
+      if (list !== 'ol') { closeList(); out.push('<ol>'); list = 'ol'; }
+      out.push(`<li>${mdInline(m[1])}</li>`);
+    } else {
+      closeList();
+      para.push(mdInline(line.trim()));
+    }
   }
-  return s.replace(/\n\n/g, '<br><br>');
+  flushPara(); closeList();
+  return '<div class="md">' + out.join('') + '</div>';
 }
 
-function applyBionic(htmlOrText) {
-  if (!anchorBoldOn || !htmlOrText) return htmlOrText;
-  return htmlOrText.replace(/(^|>)([^<]+)(<|$)/g, (m, prefix, text, suffix) => {
-    const bionic = text.replace(/\b([a-zA-Z]{1,3})([a-zA-Z]+)?\b/g, (w, stem, rest) => `<b>${stem}</b>${rest || ''}`);
-    return prefix + bionic + suffix;
+// Anchor bold works on text nodes only, so tags and HTML entities are never touched
+function applyBionic(html) {
+  if (!anchorBoldOn || !html) return html;
+  const tpl = document.createElement('template');
+  tpl.innerHTML = String(html);
+  const walker = document.createTreeWalker(tpl.content, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => n.parentElement && n.parentElement.closest('button, b, strong, code')
+      ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
   });
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  nodes.forEach(node => {
+    const text = node.nodeValue;
+    if (!/[A-Za-z]/.test(text)) return;
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    text.replace(/[A-Za-z]+/g, (word, idx) => {
+      if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+      const n = word.length <= 3 ? 1 : Math.min(3, Math.ceil(word.length * 0.4));
+      const b = document.createElement('b');
+      b.textContent = word.slice(0, n);
+      frag.appendChild(b);
+      if (word.length > n) frag.appendChild(document.createTextNode(word.slice(n)));
+      last = idx + word.length;
+      return word;
+    });
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  });
+  return tpl.innerHTML;
 }
 
-// FIXED: Reads clean textContent without destructive letter-stripping regex
+// Reads visible text only: buttons (🔊 Read, Try Again) are removed from a copy, never by word matching
 function speakText(rawTextOrElement) {
   window.speechSynthesis.cancel();
   let cleanText = '';
 
   if (typeof rawTextOrElement === 'string') {
-    cleanText = rawTextOrElement
-      .replace(/<[^>]*>/g, '')         // Strip HTML tags cleanly
-      .replace(/[*#_`~]/g, '')          // Strip markdown characters
-      .trim();
-  } else if (rawTextOrElement && rawTextOrElement.textContent) {
-    cleanText = rawTextOrElement.textContent
-      .replace(/🔊/g, '')
-      .replace(/Read/g, '')
-      .trim();
+    cleanText = new DOMParser().parseFromString(rawTextOrElement, 'text/html').body.textContent || '';
+  } else if (rawTextOrElement && rawTextOrElement.cloneNode) {
+    const copy = rawTextOrElement.cloneNode(true);
+    copy.querySelectorAll('button, .badge').forEach(el => el.remove());
+    cleanText = copy.textContent;
   }
 
+  cleanText = cleanText.replace(/[*#_`~]/g, '').replace(/\s+/g, ' ').trim();
   if (!cleanText) return;
-  const utt = new SpeechSynthesisUtterance(cleanText);
-  utt.rate = parseFloat(localStorage.getItem('ss_tts_rate') || '0.92');
-  utt.pitch = 1.0;
-  window.speechSynthesis.speak(utt);
+
+  // Chrome cuts off long single utterances, so queue one sentence at a time
+  const rate = parseFloat(localStorage.getItem('ss_tts_rate') || '0.92');
+  const sentences = cleanText.match(/[^.!?]+[.!?]+["')\]]*|[^.!?]+$/g) || [cleanText];
+  sentences.map(x => x.trim()).filter(Boolean).forEach(sentence => {
+    const utt = new SpeechSynthesisUtterance(sentence);
+    utt.rate = rate;
+    utt.pitch = 1.0;
+    window.speechSynthesis.speak(utt);
+  });
 }
 
 /* =====================================================================
@@ -777,12 +876,19 @@ function renderClassRibbon() {
     const btn = document.createElement('button');
     btn.className = `cls ${c.code === activeClassCode ? 'on' : ''}`;
     btn.textContent = `${c.icon} ${c.name}`;
+    btn.disabled = isRecording() && c.code !== activeClassCode;
+    btn.title = btn.disabled ? 'Stop recording before switching classes' : '';
     btn.onclick = () => switchClass(c.code);
     rib.appendChild(btn);
   });
 }
 
+function isRecording() {
+  return !!(mediaRecorder && mediaRecorder.state === 'recording');
+}
+
 function switchClass(code) {
+  if (isRecording()) { showToast('Stop recording before switching classes'); return; }
   activeClassCode = code;
   const c = CLASSES.find(x => x.code === code);
   document.documentElement.style.setProperty('--c', c.color);
@@ -793,8 +899,7 @@ function switchClass(code) {
   if (ds.lectures.length) {
     pickedLectures[ds.lectures[ds.lectures.length - 1].id] = true;
   }
-  quizIndex = 0;
-  quizScore = 0;
+  resetQuiz();
 
   renderClassRibbon();
   updateRecScheduleHint();
@@ -837,22 +942,26 @@ function renderUnitTrack() {
     tile.onclick = () => {
       if (pickedLectures[l.id]) delete pickedLectures[l.id];
       else pickedLectures[l.id] = true;
+      resetQuiz();
       renderAll();
     };
     track.appendChild(tile);
   });
 
-  const count = getSelectedLectures().length;
+  const count = ds.lectures.filter(l => pickedLectures[l.id]).length;
   const pickBar = document.getElementById('pickBar');
-  pickBar.style.display = (count > 0 && document.getElementById('s-cls').classList.contains('on')) ? 'flex' : 'none';
-  document.getElementById('pickCountLbl').textContent = `✅ ${count} ${count === 1 ? 'part' : 'parts'} selected`;
+  pickBar.style.display = document.getElementById('s-cls').classList.contains('on') ? 'flex' : 'none';
+  pickBar.querySelector('[data-go]').disabled = count === 0;
+  document.getElementById('pickCountLbl').textContent = count === 0
+    ? 'Pick at least one part'
+    : `✅ ${count} ${count === 1 ? 'part' : 'parts'} selected`;
 }
 
 function renderStudyGuide() {
   const selected = getSelectedLectures();
   const container = document.getElementById('guideContent');
 
-  let html = `
+  let html = renderHandoutCards() + `
     <div class="card">
       <h3>💡 The Big Idea <button class="say btn-speak" data-target="bigIdeaText">🔊 Read</button></h3>
       <p id="bigIdeaText">${applyBionic(selected.length === 1 ? selected[0].c : 'Across these ' + selected.length + ' parts you explored: ' + selected.map(l => l.t).join(', ') + '.')}</p>
@@ -890,52 +999,80 @@ function renderStudyGuide() {
   container.innerHTML = html;
 }
 
-function renderQuiz() {
+function getQuizSet() {
   const selected = getSelectedLectures();
+  if (!quizRetryIds) return selected;
+  const set = selected.filter(l => quizRetryIds.includes(l.id));
+  return set.length ? set : selected;
+}
+
+function resetQuiz(retryIds) {
+  quizIndex = 0;
+  quizScore = 0;
+  quizMissed = [];
+  quizRetryIds = retryIds || null;
+}
+
+function renderQuiz() {
+  const set = getQuizSet();
   const container = document.getElementById('quizContent');
 
-  if (quizIndex >= selected.length) {
+  if (quizIndex >= set.length) {
+    const missed = quizMissed.slice();
     container.innerHTML = `
       <div class="card center">
         <h2>🏆 Practice Complete!</h2>
-        <p style="font-size:24px;font-weight:700;color:var(--ok)">Score: ${quizScore} / ${selected.length}</p>
-        <p>Great self-testing. Missed questions stay in your practice queue for immediate retake.</p>
-        <button class="btn" id="retryQuizBtn">Retake Practice Drill</button>
+        <p style="font-size:24px;font-weight:700;color:var(--ok)">Score: ${quizScore} / ${set.length}</p>
+        <p>${missed.length
+          ? `You missed ${missed.length}. Run just those again while they are fresh.`
+          : 'Clean sweep. Try a bigger set from the Unit Map when you are ready.'}</p>
+        <div class="chips" style="justify-content:center">
+          ${missed.length ? `<button class="btn" id="retryMissedBtn">🔁 Retry missed (${missed.length})</button>` : ''}
+          <button class="btn ${missed.length ? 'alt' : ''}" id="retryQuizBtn">Retake full drill</button>
+        </div>
       </div>
     `;
-    document.getElementById('retryQuizBtn').onclick = () => { quizIndex = 0; quizScore = 0; renderQuiz(); };
+    document.getElementById('retryQuizBtn').onclick = () => { resetQuiz(); renderQuiz(); };
+    const rm = document.getElementById('retryMissedBtn');
+    if (rm) rm.onclick = () => { resetQuiz(missed); renderQuiz(); };
     return;
   }
 
-  const cur = selected[quizIndex];
+  const cur = set[quizIndex];
   container.innerHTML = `
     <div class="row">
-      <b>Self-Test Question ${quizIndex + 1} of ${selected.length}</b>
+      <b>${quizRetryIds ? 'Retry' : 'Self-Test'} Question ${quizIndex + 1} of ${set.length}</b>
       <span class="badge">${cur.i} ${cur.t}</span>
     </div>
-    <div class="progress-bar"><i style="width:${(quizIndex / selected.length) * 100}%"></i></div>
+    <div class="progress-bar"><i style="width:${(quizIndex / set.length) * 100}%"></i></div>
     <div class="card">
-      <h3 style="font-size:16px"><span id="quizQText">${applyBionic(cur.q[0])}</span> <button class="say btn-speak" data-target="quizQText">🔊</button></h3>
-      ${cur.q[1].map((opt, idx) => `<button class="opt" data-opt="${idx}">${opt}</button>`).join('')}
+      <h3 style="font-size:16px"><span id="quizQText">${applyBionic(escText(cur.q[0]))}</span> <button class="say btn-speak" data-target="quizQText">🔊</button></h3>
+      ${cur.q[1].map((opt, idx) => `<button class="opt" data-opt="${idx}">${escText(opt)}</button>`).join('')}
       <div id="quizFeedback" class="center" style="margin-top:10px;font-weight:600"></div>
     </div>
   `;
 
-  // FIXED: Disable siblings on click to prevent score gaming
   container.querySelectorAll('.opt').forEach(btn => {
     btn.onclick = () => {
       container.querySelectorAll('.opt').forEach(b => b.disabled = true);
-      const chosen = parseInt(btn.dataset.opt);
+      const chosen = parseInt(btn.dataset.opt, 10);
       const isCorrect = chosen === cur.q[2];
       btn.classList.add(isCorrect ? 'ok' : 'no');
+      if (!isCorrect) container.querySelector(`.opt[data-opt="${cur.q[2]}"]`).classList.add('ok');
       const fb = document.getElementById('quizFeedback');
       if (isCorrect) {
         quizScore++;
         fb.innerHTML = '🎉 That is correct!';
       } else {
-        fb.innerHTML = `Review note: Correct answer is <b>${cur.q[1][cur.q[2]]}</b> <span class="badge">🔊 Hear at ${cur.ts}</span>`;
+        if (!quizMissed.includes(cur.id)) quizMissed.push(cur.id);
+        fb.innerHTML = `Review note: Correct answer is <b>${escText(cur.q[1][cur.q[2]])}</b> <span class="badge">Around ${cur.ts} in class</span>`;
       }
-      setTimeout(() => { quizIndex++; renderQuiz(); }, 2200);
+      const answeredId = cur.id;
+      setTimeout(() => {
+        // Ignore if the drill was reset or the class changed during the pause
+        const now = getQuizSet()[quizIndex];
+        if (now && now.id === answeredId) { quizIndex++; renderQuiz(); }
+      }, 2200);
     };
   });
 }
@@ -1016,7 +1153,36 @@ document.getElementById('handoutFileInput').addEventListener('change', (e) => {
   }
 });
 
-// FIXED: Re-synthesize updates dedicated teacher handout notes without mangling lecture
+// Teacher handout notes are saved per class so they survive navigation and reloads
+function getHandoutsKey() { return `ss_handouts_${activeClassCode}`; }
+function loadHandouts() {
+  try { return JSON.parse(localStorage.getItem(getHandoutsKey()) || '[]'); } catch(e) { return []; }
+}
+function saveHandouts(list) {
+  try { localStorage.setItem(getHandoutsKey(), JSON.stringify(list.slice(0, 10))); }
+  catch(e) { showToast('Storage full: oldest handout notes not saved'); }
+}
+function renderHandoutCards() {
+  return loadHandouts().map((h, i) => `
+    <div class="card" style="border-color:var(--acc)">
+      <h3>📄 ${escText(h.name)}
+        <span style="display:flex;gap:6px">
+          <button class="say btn-speak" data-target="handoutBody_${i}">🔊 Read</button>
+          <button class="say" data-del-handout="${i}" title="Remove">✕</button>
+        </span>
+      </h3>
+      <div id="handoutBody_${i}">${applyBionic(mdToHtml(h.md))}</div>
+    </div>`).join('');
+}
+document.addEventListener('click', (e) => {
+  const del = e.target.closest('[data-del-handout]');
+  if (!del) return;
+  const list = loadHandouts();
+  list.splice(parseInt(del.dataset.delHandout, 10), 1);
+  saveHandouts(list);
+  renderStudyGuide();
+});
+
 document.getElementById('reSynthesizeBtn').addEventListener('click', async () => {
   const textNotes = document.getElementById('handoutTextNotes').value.trim();
   if (!textNotes && !stagedPdfBase64) {
@@ -1026,11 +1192,13 @@ document.getElementById('reSynthesizeBtn').addEventListener('click', async () =>
 
   const key = localStorage.getItem('ss_gemini_key') || '';
   if (!key) {
-    document.getElementById('pinDlg').showModal();
-    alert('Please enter your Gemini API Key in Settings first.');
+    showToast('Ask a parent to add the Gemini key in Settings (⚙️)');
     return;
   }
 
+  const btn = document.getElementById('reSynthesizeBtn');
+  if (btn.disabled) return;
+  btn.disabled = true;
   showToast('Enriching study guide with teacher materials...');
   const activeLectures = getSelectedLectures();
   const currentContent = activeLectures.map(l => `${l.t}: ${l.c}`).join('\n');
@@ -1047,42 +1215,27 @@ Format as:
 [2-3 clear bullet points with bold stems]`;
 
   try {
-    const payload = {
-      contents: [{ role: 'user', parts: [] }],
-      generationConfig: { temperature: 0.2, maxOutputTokens: 2048 }
-    };
-
+    const parts = [];
     if (stagedPdfBase64) {
-      payload.contents[0].parts.push({
-        inlineData: { mimeType: 'application/pdf', data: stagedPdfBase64 }
-      });
+      parts.push({ inlineData: { mimeType: 'application/pdf', data: stagedPdfBase64 } });
     }
-    payload.contents[0].parts.push({ text: prompt });
+    parts.push({ text: prompt });
 
     const model = localStorage.getItem('ss_gemini_model') || 'gemini-3.8-flash';
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify(payload)
+    const result = await queryGeminiWaterfall([{ role: 'user', parts }], key, model, {
+      temperature: 0.2
     });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error?.message || 'Synthesis failed');
-    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    // Append as a dedicated teacher note card
-    const container = document.getElementById('guideContent');
-    const enrichedCard = document.createElement('div');
-    enrichedCard.className = 'card';
-    enrichedCard.style.borderColor = 'var(--acc)';
-    enrichedCard.innerHTML = `
-      <h3>📄 Canvas Notes: ${stagedPdfName || 'Teacher Handout'} <button class="say btn-speak">🔊 Read</button></h3>
-      <div>${applyBionic(mdToHtml(resultText))}</div>
-    `;
-    container.insertBefore(enrichedCard, container.firstChild);
-    showToast('Teacher notes synthesized successfully!');
+    const list = loadHandouts();
+    list.unshift({ name: stagedPdfName || 'Teacher notes', md: result.text, at: Date.now() });
+    saveHandouts(list);
+    renderStudyGuide();
+    document.getElementById('guideContent').scrollIntoView({ behavior: 'smooth' });
+    showToast('Teacher notes added to the study guide');
   } catch (err) {
     alert('Synthesis error: ' + err.message);
+  } finally {
+    btn.disabled = false;
   }
 });
 
@@ -1177,7 +1330,7 @@ function renderHistoryDrawer() {
     const item = document.createElement('div');
     item.className = `thread-item ${t.id === currentThreadId ? 'active' : ''}`;
     item.innerHTML = `
-      <div style="font-weight:600;font-size:13px;color:var(--c)">${t.partTag}</div>
+      <div style="font-weight:600;font-size:13px;color:var(--c)">${escapeHtml(t.partTag || '')}</div>
       <div style="margin:2px 0 4px;font-size:13px">${escapeHtml(t.title)}</div>
       <small style="color:var(--mut)">${t.updatedAt}</small>
     `;
@@ -1211,59 +1364,96 @@ function escapeHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// Resilient Gemini 3-Series Waterfall using x-goog-api-key header
-async function queryGeminiWaterfall(contentsPayload, key, chosenModel) {
+// Joins every non-thought text part (thinking models can return several parts)
+function extractGeminiText(data) {
+  const cand = data.candidates?.[0];
+  const text = (cand?.content?.parts || [])
+    .filter(p => p.text && !p.thought)
+    .map(p => p.text)
+    .join('')
+    .trim();
+  return { text, finish: cand?.finishReason || '', blocked: data.promptFeedback?.blockReason || '' };
+}
+
+// Resilient Gemini waterfall. opts: { system, temperature, maxOutputTokens }
+async function queryGeminiWaterfall(contentsPayload, key, chosenModel, opts = {}) {
   const chain = [chosenModel, 'gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite']
     .filter((v, i, a) => v && a.indexOf(v) === i);
 
-  let lastError = null;
-  for (let i = 0; i < chain.length; i++) {
-    const curModel = chain[i];
-    try {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(curModel)}:generateContent`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': key
-        },
-        body: JSON.stringify({
-          contents: contentsPayload,
-          generationConfig: { temperature: 0.3, maxOutputTokens: 2048 }
-        })
-      });
+  const buildBody = (withThinking) => {
+    const body = {
+      contents: contentsPayload,
+      generationConfig: {
+        temperature: opts.temperature ?? 0.3,
+        // Thinking tokens count against this cap, so leave headroom
+        maxOutputTokens: opts.maxOutputTokens ?? 8192
+      }
+    };
+    if (withThinking) body.generationConfig.thinkingConfig = { thinkingLevel: 'low' };
+    if (opts.system) body.systemInstruction = { parts: [{ text: opts.system }] };
+    return body;
+  };
 
-      const data = await res.json();
-      if (!res.ok) {
-        const msg = data.error?.message || `HTTP ${res.status}`;
-        if (res.status === 503 || res.status === 429 || /demand|overload|quota|exhaust/i.test(msg)) {
-          lastError = `${curModel}: ${msg}`;
-          continue;
-        }
-        throw new Error(msg);
+  let lastError = null;
+  for (const curModel of chain) {
+    let withThinking = true;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      let res, data;
+      try {
+        res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(curModel)}:generateContent`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+          body: JSON.stringify(buildBody(withThinking))
+        });
+        data = await res.json();
+      } catch (netErr) {
+        lastError = 'Network: ' + netErr.message;
+        break; // try next model
       }
 
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error('No response returned');
-      return { text: text, modelUsed: curModel };
-    } catch (e) {
-      lastError = e.message;
-      if (/API_KEY_INVALID/i.test(e.message)) throw e;
+      if (!res.ok) {
+        const msg = data.error?.message || `HTTP ${res.status}`;
+        if (/API_KEY_INVALID|API key not valid/i.test(msg)) throw new Error(msg);
+        // Model does not accept thinkingConfig: retry the same model without it
+        if (res.status === 400 && withThinking && /thinking/i.test(msg)) { withThinking = false; continue; }
+        // Busy, quota, or unknown model: move down the chain
+        if ([404, 429, 500, 503].includes(res.status) || /demand|overload|quota|exhaust|not found/i.test(msg)) {
+          lastError = `${curModel}: ${msg}`;
+          break;
+        }
+        throw new Error(msg); // bad request, retrying other models will not help
+      }
+
+      const out = extractGeminiText(data);
+      if (out.blocked) throw new Error('Request blocked by safety filter: ' + out.blocked);
+      if (!out.text) {
+        lastError = `${curModel}: empty response${out.finish ? ' (' + out.finish + ')' : ''}`;
+        break;
+      }
+      if (out.finish === 'MAX_TOKENS') out.text += '\n\n*(Answer cut short. Ask me to continue.)*';
+      return { text: out.text, modelUsed: curModel };
     }
   }
   throw new Error(lastError || 'All models busy');
 }
 
-async function sendChatMessage(query) {
-  const text = query || document.getElementById('chatInput').value.trim();
+let chatBusy = false;
+
+async function sendChatMessage(query, isRetry = false) {
+  if (chatBusy) return;
+  const text = (query || document.getElementById('chatInput').value).trim();
   if (!text) return;
   document.getElementById('chatInput').value = '';
+  setChatBusy(true);
 
   const feed = document.getElementById('chatFeed');
-  const userMsgEl = document.createElement('div');
-  userMsgEl.className = 'msg me';
-  userMsgEl.textContent = text;
-  feed.appendChild(userMsgEl);
-  feed.scrollTop = feed.scrollHeight;
+  if (!isRetry) {
+    const userMsgEl = document.createElement('div');
+    userMsgEl.className = 'msg me';
+    userMsgEl.textContent = text;
+    feed.appendChild(userMsgEl);
+    feed.scrollTop = feed.scrollHeight;
+  }
 
   const key = localStorage.getItem('ss_gemini_key') || '';
   if (!key) {
@@ -1273,6 +1463,7 @@ async function sendChatMessage(query) {
     feed.appendChild(errEl);
     feed.scrollTop = feed.scrollHeight;
     updateActiveThreadInStorage(text);
+    setChatBusy(false);
     return;
   }
 
@@ -1284,11 +1475,8 @@ async function sendChatMessage(query) {
   const activeNotes = getSelectedLectures().map(l => `${l.t}: ${l.c} (Analogy: ${l.analogy})`).join('\n');
   const systemContext = `${sysInst}\n\n[STUDENT FUNCTIONAL PROFILE]\n${hiddenProfile}\n\n[CLASS STUDY NOTES]\n${activeNotes}`;
 
-  // Build multi-turn conversational payload
-  const contentsPayload = [
-    { role: 'user', parts: [{ text: systemContext + '\n\nPlease acknowledge you are ready to assist.' }] },
-    { role: 'model', parts: [{ text: 'Understood. I am ready to coach using concise points and relevant analogies.' }] }
-  ];
+  // Multi-turn payload; the coaching rules travel in systemInstruction, not a fake first turn
+  const contentsPayload = [];
 
   // Append recent chat turns
   currentChatHistory.slice(-6).forEach(h => {
@@ -1304,7 +1492,7 @@ async function sendChatMessage(query) {
   feed.scrollTop = feed.scrollHeight;
 
   try {
-    const result = await queryGeminiWaterfall(contentsPayload, key, model);
+    const result = await queryGeminiWaterfall(contentsPayload, key, model, { system: systemContext });
     thinkingEl.remove();
 
     const formattedHtml = applyBionic(mdToHtml(result.text));
@@ -1327,18 +1515,27 @@ async function sendChatMessage(query) {
     retryBtn.className = 'btn alt sm';
     retryBtn.style.marginTop = '8px';
     retryBtn.textContent = '🔄 Try Again';
-    retryBtn.onclick = () => sendChatMessage(text);
+    retryBtn.onclick = () => { errEl.remove(); sendChatMessage(text, true); };
     errEl.appendChild(retryBtn);
 
     feed.appendChild(errEl);
     feed.scrollTop = feed.scrollHeight;
     updateActiveThreadInStorage(text);
+  } finally {
+    setChatBusy(false);
   }
+}
+
+function setChatBusy(on) {
+  chatBusy = on;
+  document.getElementById('chatSendBtn').disabled = on;
+  document.getElementById('chatMicBtn').disabled = on;
+  document.querySelectorAll('.sample-q').forEach(b => b.disabled = on);
 }
 
 document.getElementById('chatSendBtn').addEventListener('click', () => sendChatMessage());
 document.getElementById('chatInput').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') sendChatMessage();
+  if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); sendChatMessage(); }
 });
 
 // Speech Recognition for Chat Mic
@@ -1350,7 +1547,6 @@ if (SR) {
   
   reco.onresult = (e) => {
     const spoken = e.results[0][0].transcript;
-    document.getElementById('chatInput').value = spoken;
     document.getElementById('chatMicBtn').textContent = '🎤 Speak';
     sendChatMessage(spoken);
   };
@@ -1358,8 +1554,9 @@ if (SR) {
   reco.onend = () => { document.getElementById('chatMicBtn').textContent = '🎤 Speak'; };
 
   document.getElementById('chatMicBtn').addEventListener('click', () => {
+    if (chatBusy) return;
     document.getElementById('chatMicBtn').textContent = '🔴 Listening…';
-    reco.start();
+    try { reco.start(); } catch(e) { /* already listening */ }
   });
 } else {
   document.getElementById('chatMicBtn').style.display = 'none';
@@ -1382,6 +1579,9 @@ document.getElementById('openCfgBtn').addEventListener('click', () => {
   document.getElementById('pinDlg').showModal();
 });
 document.getElementById('closePinBtn').addEventListener('click', () => document.getElementById('pinDlg').close());
+document.getElementById('pinInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('submitPinBtn').click(); }
+});
 
 document.getElementById('submitPinBtn').addEventListener('click', () => {
   const entered = document.getElementById('pinInput').value.trim();
@@ -1399,16 +1599,36 @@ function openParentVault() {
   document.getElementById('masterSystemPrompt').value = localStorage.getItem('ss_master_prompt') || DEFAULT_SYSTEM_PROMPT;
   document.getElementById('cfgNewPin').value = getParentPin();
   document.getElementById('cfgReadingLevel').value = localStorage.getItem('ss_reading_level') || '5';
+  document.getElementById('cfgTtsRate').value = localStorage.getItem('ss_tts_rate') || '0.92';
   
+  document.getElementById('cfgProvider').value = localStorage.getItem('ss_provider') || 'gemini';
+  applyProviderView();
+
   const savedModel = localStorage.getItem('ss_gemini_model') || 'gemini-3.8-flash';
   const sel = document.getElementById('geminiModelSelect');
-  if (Array.from(sel.options).some(o => o.value === savedModel)) {
-    sel.value = savedModel;
+  if (!Array.from(sel.options).some(o => o.value === savedModel)) {
+    const o = document.createElement('option');
+    o.value = savedModel; o.textContent = savedModel;
+    sel.appendChild(o);
   }
+  sel.value = savedModel;
   document.getElementById('cfgDlg').showModal();
 }
 
 document.getElementById('closeCfgBtn').addEventListener('click', () => document.getElementById('cfgDlg').close());
+
+function applyProviderView() {
+  const v = document.getElementById('cfgProvider').value;
+  document.getElementById('geminiBox').style.display = v === 'gemini' ? '' : 'none';
+  document.getElementById('azureBox').style.display = v === 'azure' ? '' : 'none';
+}
+document.getElementById('cfgProvider').addEventListener('change', applyProviderView);
+
+// Not built yet in this demo: say so instead of doing nothing
+[['batchProcessBtn', 'Lecture processing'], ['spSyncBtn', 'SharePoint sync'], ['msSignInBtn', 'Microsoft sign-in']]
+  .forEach(([id, label]) => {
+    document.getElementById(id).addEventListener('click', () => showToast(`${label} is not connected in this demo build yet`));
+  });
 
 // Test Key & Fetch Models using x-goog-api-key header
 document.getElementById('testGeminiBtn').addEventListener('click', async () => {
@@ -1455,9 +1675,11 @@ document.getElementById('saveCfgBtn').addEventListener('click', () => {
   localStorage.setItem('ss_hidden_profile', document.getElementById('hiddenProfileText').value);
   localStorage.setItem('ss_master_prompt', document.getElementById('masterSystemPrompt').value);
   localStorage.setItem('ss_tts_rate', document.getElementById('cfgTtsRate').value);
-  
+  localStorage.setItem('ss_provider', document.getElementById('cfgProvider').value);
+
   const newPin = document.getElementById('cfgNewPin').value.trim();
-  if (newPin.length === 4) localStorage.setItem(PARENT_PIN_KEY, newPin);
+  if (newPin && !/^\d{4}$/.test(newPin)) { alert('PIN must be exactly 4 digits.'); return; }
+  if (newPin) localStorage.setItem(PARENT_PIN_KEY, newPin);
 
   document.getElementById('cfgDlg').close();
   showToast('Settings saved!');
@@ -1507,12 +1729,18 @@ document.querySelectorAll('[data-q]').forEach(btn => {
     const q = btn.dataset.q;
     const ds = getActiveDataset();
     pickedLectures = {};
+    const todayAbbr = new Date().toLocaleDateString('en-US', { weekday: 'short' });
+    const todays = ds.lectures.filter(l => l.d === todayAbbr);
     ds.lectures.forEach((l, idx) => {
-      if (q === 'all') pickedLectures[l.id] = true;
-      if (q === 'today' && idx === ds.lectures.length - 1) pickedLectures[l.id] = true;
       if (q === 'unit') pickedLectures[l.id] = true;
       if (q === 'test' && idx >= ds.lectures.length - 2) pickedLectures[l.id] = true;
     });
+    if (q === 'today') {
+      // Match today's weekday; fall back to the most recent part
+      (todays.length ? todays : ds.lectures.slice(-1)).forEach(l => pickedLectures[l.id] = true);
+      if (!todays.length) showToast(`No ${todayAbbr} lecture saved, showing the latest one`);
+    }
+    resetQuiz();
     renderAll();
   };
 });
