@@ -109,12 +109,12 @@ main { padding: 4px 18px 140px; flex: 1; }
 .opt { display: block; width: 100%; text-align: left; margin: 10px 0; border: 2px solid var(--line); background: var(--card); border-radius: 14px; padding: 14px; cursor: pointer; min-height: 58px; font-weight: 500; transition: border-color .15s; }
 .opt.ok { border-color: var(--ok); background: #E6F4EA; }
 .opt.no { border-color: var(--bad); background: #FCE8E6; }
+.opt:disabled { cursor: default; }
 .progress-bar { height: 14px; border-radius: 999px; background: var(--line); overflow: hidden; margin: 8px 0 16px; }
 .progress-bar i { display: block; height: 100%; background: var(--ok); transition: width .3s ease; }
 
 /* Canvas & Teacher Handout Dropzone */
 .handout-box { background: var(--card); border: 2px dashed var(--line); border-radius: 16px; padding: 16px; margin: 12px 0; }
-.handout-box.dragover { border-color: var(--c); background: var(--sel); }
 .handout-preview { font-size: 13px; color: var(--mut); margin-top: 6px; }
 
 /* Slide-Out Chat History Drawer */
@@ -152,14 +152,14 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
   <header class="top">
     <div class="brand">📓 Student Study</div>
     <div class="top-actions">
-      <button class="tog" id="ancBtn">Aa Anchor bold: On</button>
+      <button class="tog" id="ancBtn">Aa Anchor bold: Off</button>
       <div class="tints" aria-label="Color Theme">
         <button style="background:#FDFBF7" data-t="cream" title="Cream"></button>
         <button style="background:#FCE8DE" data-t="peach" title="Peach"></button>
         <button style="background:#E3E9EF" data-t="blue" title="Blue"></button>
         <button style="background:#1E1E1E" data-t="dark" title="Dark"></button>
       </div>
-      <button class="btn-icon" id="openCfgBtn" title="Parent & Admin Vault">⚙️</button>
+      <button class="btn-icon" id="openCfgBtn" title="Parent & Settings Vault">⚙️</button>
     </div>
   </header>
 
@@ -286,11 +286,11 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
 <!-- Parent PIN Access Modal -->
 <dialog class="cfg-dlg" id="pinDlg" style="max-width:380px">
   <div class="dlg-head">
-    <h3 style="margin:0;color:var(--c)">🔒 Parent &amp; Coach Gate</h3>
+    <h3 style="margin:0;color:var(--c)">🔒 Parent &amp; Settings Gate</h3>
     <button class="say" id="closePinBtn">✕</button>
   </div>
   <div class="dlg-body" style="text-align:center">
-    <p style="font-size:14px;color:var(--mut);margin:0">Enter 4-digit PIN to access credentials and profile:</p>
+    <p style="font-size:14px;color:var(--mut);margin:0">Enter 4-digit PIN to access cloud &amp; learner settings:</p>
     <input type="password" id="pinInput" maxlength="4" placeholder="••••" style="font-size:28px;text-align:center;letter-spacing:.3em;width:140px;margin:10px auto">
     <p id="pinError" style="color:var(--bad);font-size:13px;display:none">Incorrect PIN. Try again.</p>
   </div>
@@ -302,7 +302,7 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
 <!-- Parent & Cloud Configuration Dialog Modal -->
 <dialog class="cfg-dlg" id="cfgDlg">
   <div class="dlg-head">
-    <h3 style="margin:0;color:var(--c)">⚙️ Parent Vault &amp; System Engine</h3>
+    <h3 style="margin:0;color:var(--c)">⚙️ Settings &amp; Learning Profile</h3>
     <button class="say" id="closeCfgBtn">✕ Close</button>
   </div>
   <div class="dlg-body">
@@ -370,12 +370,12 @@ dialog::backdrop { background: rgba(30,30,30,.55); }
       </select>
     </label>
 
-    <h4>Mac's Learner Profile (Hidden Prompt Injector)</h4>
-    <p style="font-size:12px;color:var(--mut);margin:0">Silently appended to the AI instructions. Mac never sees this text.</p>
-    <textarea id="hiddenProfileText" rows="6" style="width:100%;font-size:13px;line-height:1.5"></textarea>
+    <h4>Functional Learner Profile (Prompt Injector)</h4>
+    <p style="font-size:12px;color:var(--mut);margin:0">Functional prompt guidance (no medical labels). Saved locally on this device.</p>
+    <textarea id="hiddenProfileText" rows="5" style="width:100%;font-size:13px;line-height:1.5"></textarea>
 
     <h4>Master AI Prompt Instructions</h4>
-    <textarea id="masterSystemPrompt" rows="6" style="width:100%;font-size:13px;line-height:1.5"></textarea>
+    <textarea id="masterSystemPrompt" rows="5" style="width:100%;font-size:13px;line-height:1.5"></textarea>
 
     <h4>Security &amp; TTS Settings</h4>
     <label>Change Parent PIN
@@ -408,14 +408,14 @@ const CLASSES = [
   { code: 'WLN_1',   name: 'Wellness',             period: 5, teacher: 'Craft',    color: '#D97706', icon: '🍎' }
 ];
 
-const DEFAULT_PROFILE = `STUDENT: Mac (Age 14, 9th Grade)
-PROFILE: Auditory Dyslexia, Central Auditory Processing Disorder (CAPD), Inattentive ADHD with Cognitive Disengagement Syndrome (sluggish processing speed, mental fatigue).
-READING CEILING: Target Grade Level: {LEVEL}. Keep sentences punchy. Zero walls of text. Do NOT use childish tone; speak to him as a mature young adult.
-PASSIONS & ANALOGIES: Commercial Aviation (aerodynamics, cockpits, jet engines, flight levels), WWII Tactics & Strategy, Bicycle & Engine Mechanics, Soccer Pitch Tactics, Video Game Physics, Coding logic.
+// CLEAN FUNCTIONAL PROFILE (No PII or clinical diagnostic labels)
+const DEFAULT_PROFILE = `STUDENT PROFILE: High school student with visual and auditory processing fatigue.
+READING CEILING: Target Grade Level: {LEVEL}. Keep sentences punchy, direct, and scannable. Zero walls of text. Do NOT use childish tone; speak to him as a mature young adult.
+ANALOGY POOL: Commercial Aviation (aerodynamics, cockpits, jet engines, flight levels), WWII Tactics & Strategy, Bicycle & Engine Mechanics, Soccer Pitch Tactics, Video Game Physics, Coding logic.
 STRATEGY: Break answers into 3-4 bullet chunks. Bold the first letters of key terms. Draw fluidly from this variety of topics—do NOT repeat aviation on every concept. Keep comparisons natural and fresh. End with a quick 1-sentence check question.`;
 
-const DEFAULT_SYSTEM_PROMPT = `You are a supportive, high-caliber study coach for a 9th-grade student named Mac.
-Follow the hidden student profile provided.
+const DEFAULT_SYSTEM_PROMPT = `You are a supportive, high-caliber study coach for a 9th-grade student.
+Follow the hidden functional profile provided.
 Keep responses concise, clear, and punchy.
 Never lecture in long paragraphs. Use clear bullet points and bold anchor stems.
 Ground all science and math concepts in realistic analogies across aviation, war history, mechanics, soccer, or gaming.`;
@@ -545,34 +545,39 @@ const CURRICULUM = {
 };
 
 let activeClassCode = 'BIO_1';
-let anchorBoldOn = true;
+let anchorBoldOn = false; // Defaulted to OFF based on research feedback
 let pickedLectures = {};
 let quizIndex = 0;
 let quizScore = 0;
 let stagedPdfBase64 = null;
 let stagedPdfName = null;
+let currentChatHistory = []; // Multi-turn memory
 
 /* =====================================================================
-   SECTION 2 - INDEXEDDB STORAGE (OFFLINE RECORDING VAULT)
+   SECTION 2 - INDEXEDDB STORAGE (SINGLE CONNECTION PROMISE)
    ===================================================================== */
-const DB_NAME = 'StudentStudy_v1';
+const DB_NAME = 'StudentStudy_v2';
 const DB_VERSION = 1;
+let dbPromise = null;
 
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
-    req.onupgradeneeded = (e) => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains('chunks')) db.createObjectStore('chunks', { keyPath: 'id' });
-      if (!db.objectStoreNames.contains('lectures')) db.createObjectStore('lectures', { keyPath: 'clientId' });
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
+function getDB() {
+  if (!dbPromise) {
+    dbPromise = new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('chunks')) db.createObjectStore('chunks', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains('lectures')) db.createObjectStore('lectures', { keyPath: 'clientId' });
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+  return dbPromise;
 }
 
 async function idbPut(storeName, data) {
-  const db = await openDB();
+  const db = await getDB();
   return new Promise((res, rej) => {
     const tx = db.transaction(storeName, 'readwrite');
     tx.objectStore(storeName).put(data);
@@ -582,7 +587,7 @@ async function idbPut(storeName, data) {
 }
 
 async function idbGetAll(storeName) {
-  const db = await openDB();
+  const db = await getDB();
   return new Promise((res, rej) => {
     const tx = db.transaction(storeName, 'readonly');
     const req = tx.objectStore(storeName).getAll();
@@ -592,13 +597,14 @@ async function idbGetAll(storeName) {
 }
 
 /* =====================================================================
-   SECTION 3 - AUDIO RECORDING ENGINE (10-SECOND SLICES)
+   SECTION 3 - AUDIO RECORDING ENGINE (WITH SCREEN WAKE LOCK)
    ===================================================================== */
 let mediaRecorder = null;
 let audioStream = null;
 let activeRecordingSession = null;
 let timerInterval = null;
 let recordSeconds = 0;
+let wakeLock = null;
 
 function formatTimer(sec) {
   const m = Math.floor(sec / 60);
@@ -612,6 +618,10 @@ async function startRecording() {
       audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
     });
     audioStream = stream;
+
+    if ('wakeLock' in navigator) {
+      try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
+    }
 
     const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
     mediaRecorder = new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 });
@@ -631,15 +641,18 @@ async function startRecording() {
     };
 
     let chunkSequence = 0;
+    const sessionTargetId = clientId;
+
     mediaRecorder.ondataavailable = async (e) => {
-      if (e.data && e.data.size > 0) {
+      // Guard against late chunks after stop
+      if (e.data && e.data.size > 0 && activeRecordingSession && activeRecordingSession.clientId === sessionTargetId) {
         chunkSequence++;
         activeRecordingSession.chunksCount = chunkSequence;
         activeRecordingSession.durationSeconds = recordSeconds;
         
         await idbPut('chunks', {
-          id: `${clientId}_chk_${chunkSequence}`,
-          sessionId: clientId,
+          id: `${sessionTargetId}_chk_${chunkSequence}`,
+          sessionId: sessionTargetId,
           seq: chunkSequence,
           blob: e.data,
           recordedAt: Date.now()
@@ -666,13 +679,17 @@ async function startRecording() {
 async function stopRecording() {
   if (!mediaRecorder) return;
   clearInterval(timerInterval);
+  if (wakeLock) { try { await wakeLock.release(); wakeLock = null; } catch(e){} }
+
   mediaRecorder.stop();
   audioStream.getTracks().forEach(t => t.stop());
   mediaRecorder = null;
 
-  activeRecordingSession.status = 'ready_for_processing';
-  activeRecordingSession.durationSeconds = recordSeconds;
-  await idbPut('lectures', activeRecordingSession);
+  if (activeRecordingSession) {
+    activeRecordingSession.status = 'ready_for_processing';
+    activeRecordingSession.durationSeconds = recordSeconds;
+    await idbPut('lectures', activeRecordingSession);
+  }
 
   document.getElementById('recBtn').classList.remove('on');
   document.getElementById('recBtn').textContent = '● Record';
@@ -688,7 +705,7 @@ document.addEventListener('visibilitychange', () => {
 });
 
 /* =====================================================================
-   SECTION 4 - CLEAN MARKDOWN & BIONIC READING ENGINE
+   SECTION 4 - CLEAN MARKDOWN, BIONIC FORMATTING & ACCURATE TTS
    ===================================================================== */
 function mdToHtml(md) {
   if (!md) return '';
@@ -711,17 +728,32 @@ function applyBionic(htmlOrText) {
   });
 }
 
-function speakText(rawText) {
+// FIXED: Reads clean textContent without destructive letter-stripping regex
+function speakText(rawTextOrElement) {
   window.speechSynthesis.cancel();
-  const clean = rawText.replace(/[*#_<b><\/b><strong><\/strong>]/g, '');
-  const utt = new SpeechSynthesisUtterance(clean);
+  let cleanText = '';
+
+  if (typeof rawTextOrElement === 'string') {
+    cleanText = rawTextOrElement
+      .replace(/<[^>]*>/g, '')         // Strip HTML tags cleanly
+      .replace(/[*#_`~]/g, '')          // Strip markdown characters
+      .trim();
+  } else if (rawTextOrElement && rawTextOrElement.textContent) {
+    cleanText = rawTextOrElement.textContent
+      .replace(/🔊/g, '')
+      .replace(/Read/g, '')
+      .trim();
+  }
+
+  if (!cleanText) return;
+  const utt = new SpeechSynthesisUtterance(cleanText);
   utt.rate = parseFloat(localStorage.getItem('ss_tts_rate') || '0.92');
   utt.pitch = 1.0;
   window.speechSynthesis.speak(utt);
 }
 
 /* =====================================================================
-   SECTION 5 - MULTI-SUBJECT UI & NAVIGATION ENGINE
+   SECTION 5 - MULTI-SUBJECT UI & DELEGATED NAVIGATION
    ===================================================================== */
 function getActiveDataset() {
   return CURRICULUM[activeClassCode] || CURRICULUM['BIO_1'];
@@ -822,18 +854,18 @@ function renderStudyGuide() {
 
   let html = `
     <div class="card">
-      <h3>💡 The Big Idea <button class="say" onclick="speakText(this.parentElement.nextElementSibling.textContent)">🔊 Read</button></h3>
-      <p>${applyBionic(selected.length === 1 ? selected[0].c : 'Across these ' + selected.length + ' parts you explored: ' + selected.map(l => l.t).join(', ') + '.')}</p>
+      <h3>💡 The Big Idea <button class="say btn-speak" data-target="bigIdeaText">🔊 Read</button></h3>
+      <p id="bigIdeaText">${applyBionic(selected.length === 1 ? selected[0].c : 'Across these ' + selected.length + ' parts you explored: ' + selected.map(l => l.t).join(', ') + '.')}</p>
     </div>
     <div class="card">
-      <h3>🔑 Core Concepts <button class="say" onclick="speakText(this.parentElement.nextElementSibling.textContent)">🔊 Read</button></h3>
-      <ul>
+      <h3>🔑 Core Concepts <button class="say btn-speak" data-target="coreConceptsList">🔊 Read</button></h3>
+      <ul id="coreConceptsList">
         ${selected.map((l, idx) => `<li>${l.i} <strong>${l.bold_stem}:</strong> ${applyBionic(l.c)} <span class="badge">Part ${idx + 1}</span></li>`).join('')}
       </ul>
     </div>
     <div class="card" style="border-color:var(--c)">
-      <h3>🧭 Real-World Analogy <button class="say" onclick="speakText(this.parentElement.nextElementSibling.textContent)">🔊 Read</button></h3>
-      <p>${applyBionic(selected[selected.length - 1].analogy)}</p>
+      <h3>🧭 Real-World Analogy <button class="say btn-speak" data-target="analogyText">🔊 Read</button></h3>
+      <p id="analogyText">${applyBionic(selected[selected.length - 1].analogy)}</p>
     </div>
   `;
 
@@ -841,8 +873,8 @@ function renderStudyGuide() {
   if (cues.length) {
     html += `
       <div class="card">
-        <h3>⭐ Teacher Said "Remember This!" <button class="say" onclick="speakText(this.parentElement.nextElementSibling.textContent)">🔊 Read</button></h3>
-        <ul>
+        <h3>⭐ Teacher Said "Remember This!" <button class="say btn-speak" data-target="cuesList">🔊 Read</button></h3>
+        <ul id="cuesList">
           ${cues.map(l => `<li><strong>${applyBionic(l.cue)}</strong> <span class="badge">🔊 Approx ${l.ts}</span></li>`).join('')}
         </ul>
       </div>
@@ -883,14 +915,16 @@ function renderQuiz() {
     </div>
     <div class="progress-bar"><i style="width:${(quizIndex / selected.length) * 100}%"></i></div>
     <div class="card">
-      <h3 style="font-size:16px">${applyBionic(cur.q[0])} <button class="say" onclick="speakText('${cur.q[0]}')">🔊</button></h3>
+      <h3 style="font-size:16px"><span id="quizQText">${applyBionic(cur.q[0])}</span> <button class="say btn-speak" data-target="quizQText">🔊</button></h3>
       ${cur.q[1].map((opt, idx) => `<button class="opt" data-opt="${idx}">${opt}</button>`).join('')}
       <div id="quizFeedback" class="center" style="margin-top:10px;font-weight:600"></div>
     </div>
   `;
 
+  // FIXED: Disable siblings on click to prevent score gaming
   container.querySelectorAll('.opt').forEach(btn => {
     btn.onclick = () => {
+      container.querySelectorAll('.opt').forEach(b => b.disabled = true);
       const chosen = parseInt(btn.dataset.opt);
       const isCorrect = chosen === cur.q[2];
       btn.classList.add(isCorrect ? 'ok' : 'no');
@@ -939,6 +973,14 @@ document.addEventListener('click', (e) => {
     e.preventDefault();
     navigateTo(g.dataset.go);
   }
+  
+  const speakBtn = e.target.closest('.btn-speak');
+  if (speakBtn) {
+    const tid = speakBtn.dataset.target;
+    const targetEl = document.getElementById(tid);
+    if (targetEl) speakText(targetEl);
+    else if (speakBtn.parentElement) speakText(speakBtn.parentElement);
+  }
 });
 
 /* =====================================================================
@@ -962,7 +1004,6 @@ document.getElementById('handoutFileInput').addEventListener('change', (e) => {
     };
     reader.readAsDataURL(file);
   } else {
-    // Plain text / notepad .txt file
     const reader = new FileReader();
     reader.onload = (ev) => {
       stagedPdfBase64 = null;
@@ -975,7 +1016,7 @@ document.getElementById('handoutFileInput').addEventListener('change', (e) => {
   }
 });
 
-// Re-Synthesize Notes with Canvas Handouts
+// FIXED: Re-synthesize updates dedicated teacher handout notes without mangling lecture
 document.getElementById('reSynthesizeBtn').addEventListener('click', async () => {
   const textNotes = document.getElementById('handoutTextNotes').value.trim();
   if (!textNotes && !stagedPdfBase64) {
@@ -990,32 +1031,24 @@ document.getElementById('reSynthesizeBtn').addEventListener('click', async () =>
     return;
   }
 
-  showToast('Re-synthesizing study guide with teacher materials...');
+  showToast('Enriching study guide with teacher materials...');
   const activeLectures = getSelectedLectures();
   const currentContent = activeLectures.map(l => `${l.t}: ${l.c}`).join('\n');
   
-  const prompt = `You are updating study notes for 9th-grader Mac.
-Combine these existing class notes:
-${currentContent}
-
-With this new teacher handout / Canvas material:
+  const prompt = `You are a high school study coach.
+Synthesize these teacher Canvas notes into concise, scannable study additions:
 ${textNotes || '(See attached PDF document)'}
 
-Produce updated notes adhering to his reading profile.
-Format strictly in plain text:
-BIG IDEA: [1-2 sentences]
-KEY CONCEPTS:
-- [Concept 1]
-- [Concept 2]
-ANALOGY: [Relatable comparison]
-TEACHER CUES: [Test tips or homework deadlines]`;
+Existing lecture context:
+${currentContent}
+
+Format as:
+## Key Teacher Additions
+[2-3 clear bullet points with bold stems]`;
 
   try {
     const payload = {
-      contents: [{
-        role: 'user',
-        parts: []
-      }],
+      contents: [{ role: 'user', parts: [] }],
       generationConfig: { temperature: 0.2, maxOutputTokens: 2048 }
     };
 
@@ -1027,9 +1060,9 @@ TEACHER CUES: [Test tips or homework deadlines]`;
     payload.contents[0].parts.push({ text: prompt });
 
     const model = localStorage.getItem('ss_gemini_model') || 'gemini-3.8-flash';
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${key}`, {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify(payload)
     });
 
@@ -1037,18 +1070,24 @@ TEACHER CUES: [Test tips or homework deadlines]`;
     if (!res.ok) throw new Error(data.error?.message || 'Synthesis failed');
     const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    // Update active lecture with enriched notes
-    const active = activeLectures[activeLectures.length - 1];
-    active.c = resultText.slice(0, 320) + '…';
-    renderAll();
-    showToast('Notes enriched with teacher handout!');
+    // Append as a dedicated teacher note card
+    const container = document.getElementById('guideContent');
+    const enrichedCard = document.createElement('div');
+    enrichedCard.className = 'card';
+    enrichedCard.style.borderColor = 'var(--acc)';
+    enrichedCard.innerHTML = `
+      <h3>📄 Canvas Notes: ${stagedPdfName || 'Teacher Handout'} <button class="say btn-speak">🔊 Read</button></h3>
+      <div>${applyBionic(mdToHtml(resultText))}</div>
+    `;
+    container.insertBefore(enrichedCard, container.firstChild);
+    showToast('Teacher notes synthesized successfully!');
   } catch (err) {
     alert('Synthesis error: ' + err.message);
   }
 });
 
 /* =====================================================================
-   SECTION 7 - CHAT THREADS & PERSISTENT HISTORY DRAWER
+   SECTION 7 - CHAT THREADS & MULTI-TURN AI CONVERSATION
    ===================================================================== */
 let currentThreadId = null;
 
@@ -1076,6 +1115,7 @@ function loadSubjectChat() {
     const latest = threads[0];
     currentThreadId = latest.id;
     feed.innerHTML = latest.html;
+    currentChatHistory = latest.history || [];
   } else {
     startNewChatThread();
   }
@@ -1088,10 +1128,11 @@ function startNewChatThread() {
   const partTag = activeLectures[activeLectures.length - 1].t;
   
   currentThreadId = 'thread_' + Date.now();
+  currentChatHistory = [];
   const initialHtml = `
     <div class="msg ai">
-      <button class="say" style="float:right" onclick="speakText(this.parentElement.textContent)">🔊</button>
-      Hi Mac, I am your <b>${c.name}</b> study coach. Ask me anything about your current unit notes, or tap an idea below!
+      <button class="say btn-speak">🔊</button>
+      Hi, I am your <b>${c.name}</b> study coach. Ask me anything about your current unit notes, or tap an idea below!
     </div>
   `;
   document.getElementById('chatFeed').innerHTML = initialHtml;
@@ -1102,7 +1143,8 @@ function startNewChatThread() {
     partTag: partTag,
     title: 'New Study Conversation',
     updatedAt: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-    html: initialHtml
+    html: initialHtml,
+    history: []
   });
   saveAllThreads(threads);
 }
@@ -1136,12 +1178,13 @@ function renderHistoryDrawer() {
     item.className = `thread-item ${t.id === currentThreadId ? 'active' : ''}`;
     item.innerHTML = `
       <div style="font-weight:600;font-size:13px;color:var(--c)">${t.partTag}</div>
-      <div style="margin:2px 0 4px;font-size:13px">${t.title}</div>
+      <div style="margin:2px 0 4px;font-size:13px">${escapeHtml(t.title)}</div>
       <small style="color:var(--mut)">${t.updatedAt}</small>
     `;
     item.onclick = () => {
       currentThreadId = t.id;
       document.getElementById('chatFeed').innerHTML = t.html;
+      currentChatHistory = t.history || [];
       document.getElementById('chatHistoryDrawer').classList.remove('open');
       renderHistoryDrawer();
     };
@@ -1155,6 +1198,7 @@ function updateActiveThreadInStorage(firstQuery) {
   const idx = threads.findIndex(t => t.id === currentThreadId);
   if (idx > -1) {
     threads[idx].html = feed.innerHTML;
+    threads[idx].history = currentChatHistory;
     if (firstQuery && threads[idx].title === 'New Study Conversation') {
       threads[idx].title = firstQuery.slice(0, 36) + '…';
     }
@@ -1163,8 +1207,12 @@ function updateActiveThreadInStorage(firstQuery) {
   }
 }
 
-// Resilient Gemini 3-Series Waterfall
-async function queryGeminiWaterfall(fullPrompt, key, chosenModel) {
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// Resilient Gemini 3-Series Waterfall using x-goog-api-key header
+async function queryGeminiWaterfall(contentsPayload, key, chosenModel) {
   const chain = [chosenModel, 'gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite']
     .filter((v, i, a) => v && a.indexOf(v) === i);
 
@@ -1172,11 +1220,14 @@ async function queryGeminiWaterfall(fullPrompt, key, chosenModel) {
   for (let i = 0; i < chain.length; i++) {
     const curModel = chain[i];
     try {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(curModel)}:generateContent?key=${key}`, {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(curModel)}:generateContent`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': key
+        },
         body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
+          contents: contentsPayload,
           generationConfig: { temperature: 0.3, maxOutputTokens: 2048 }
         })
       });
@@ -1208,12 +1259,18 @@ async function sendChatMessage(query) {
   document.getElementById('chatInput').value = '';
 
   const feed = document.getElementById('chatFeed');
-  feed.innerHTML += `<div class="msg me">${text}</div>`;
+  const userMsgEl = document.createElement('div');
+  userMsgEl.className = 'msg me';
+  userMsgEl.textContent = text;
+  feed.appendChild(userMsgEl);
   feed.scrollTop = feed.scrollHeight;
 
   const key = localStorage.getItem('ss_gemini_key') || '';
   if (!key) {
-    feed.innerHTML += `<div class="msg ai err">⚠️ Please ask a parent to enter the Gemini API Key under Settings (⚙️).</div>`;
+    const errEl = document.createElement('div');
+    errEl.className = 'msg ai err';
+    errEl.textContent = '⚠️ Please ask a parent to enter the Gemini API Key under Settings (⚙️).';
+    feed.appendChild(errEl);
     feed.scrollTop = feed.scrollHeight;
     updateActiveThreadInStorage(text);
     return;
@@ -1225,33 +1282,55 @@ async function sendChatMessage(query) {
   const sysInst = localStorage.getItem('ss_master_prompt') || DEFAULT_SYSTEM_PROMPT;
 
   const activeNotes = getSelectedLectures().map(l => `${l.t}: ${l.c} (Analogy: ${l.analogy})`).join('\n');
-  const fullPrompt = `${sysInst}\n\n[STUDENT COGNITIVE PROFILE]\n${hiddenProfile}\n\n[CLASS STUDY NOTES]\n${activeNotes}\n\n[STUDENT QUESTION]\n${text}`;
+  const systemContext = `${sysInst}\n\n[STUDENT FUNCTIONAL PROFILE]\n${hiddenProfile}\n\n[CLASS STUDY NOTES]\n${activeNotes}`;
 
-  const thinkingId = 'thinking_' + Date.now();
-  feed.innerHTML += `<div class="msg ai" id="${thinkingId}">Coach is preparing explanation…</div>`;
+  // Build multi-turn conversational payload
+  const contentsPayload = [
+    { role: 'user', parts: [{ text: systemContext + '\n\nPlease acknowledge you are ready to assist.' }] },
+    { role: 'model', parts: [{ text: 'Understood. I am ready to coach using concise points and relevant analogies.' }] }
+  ];
+
+  // Append recent chat turns
+  currentChatHistory.slice(-6).forEach(h => {
+    contentsPayload.push({ role: h.role, parts: [{ text: h.text }] });
+  });
+  contentsPayload.push({ role: 'user', parts: [{ text: text }] });
+
+  const thinkingEl = document.createElement('div');
+  thinkingEl.className = 'msg ai';
+  thinkingEl.id = 'thinkingMsg';
+  thinkingEl.textContent = 'Coach is preparing explanation…';
+  feed.appendChild(thinkingEl);
   feed.scrollTop = feed.scrollHeight;
 
   try {
-    const result = await queryGeminiWaterfall(fullPrompt, key, model);
-    document.getElementById(thinkingId)?.remove();
+    const result = await queryGeminiWaterfall(contentsPayload, key, model);
+    thinkingEl.remove();
 
     const formattedHtml = applyBionic(mdToHtml(result.text));
-    feed.innerHTML += `
-      <div class="msg ai">
-        <button class="say" style="float:right" onclick="speakText(this.parentElement.textContent)">🔊</button>
-        ${formattedHtml}
-      </div>
-    `;
+    const aiMsgEl = document.createElement('div');
+    aiMsgEl.className = 'msg ai';
+    aiMsgEl.innerHTML = `<button class="say btn-speak" style="float:right">🔊</button>${formattedHtml}`;
+    feed.appendChild(aiMsgEl);
     feed.scrollTop = feed.scrollHeight;
+
+    currentChatHistory.push({ role: 'user', text: text });
+    currentChatHistory.push({ role: 'model', text: result.text });
     updateActiveThreadInStorage(text);
   } catch (err) {
-    document.getElementById(thinkingId)?.remove();
-    feed.innerHTML += `
-      <div class="msg ai err">
-        Connection paused: ${err.message}<br>
-        <button class="btn alt sm" style="margin-top:8px" onclick="sendChatMessage('${text.replace(/'/g, "\\'")}')">🔄 Try Again</button>
-      </div>
-    `;
+    thinkingEl.remove();
+    const errEl = document.createElement('div');
+    errEl.className = 'msg ai err';
+    errEl.innerHTML = `Connection paused: ${escapeHtml(err.message)}<br>`;
+    
+    const retryBtn = document.createElement('button');
+    retryBtn.className = 'btn alt sm';
+    retryBtn.style.marginTop = '8px';
+    retryBtn.textContent = '🔄 Try Again';
+    retryBtn.onclick = () => sendChatMessage(text);
+    errEl.appendChild(retryBtn);
+
+    feed.appendChild(errEl);
     feed.scrollTop = feed.scrollHeight;
     updateActiveThreadInStorage(text);
   }
@@ -1331,7 +1410,7 @@ function openParentVault() {
 
 document.getElementById('closeCfgBtn').addEventListener('click', () => document.getElementById('cfgDlg').close());
 
-// Test Key & Fetch 3-Series Models
+// Test Key & Fetch Models using x-goog-api-key header
 document.getElementById('testGeminiBtn').addEventListener('click', async () => {
   const k = document.getElementById('geminiApiKey').value.trim();
   const badge = document.getElementById('geminiStatusBadge');
@@ -1339,7 +1418,9 @@ document.getElementById('testGeminiBtn').addEventListener('click', async () => {
 
   badge.textContent = 'Contacting AI Studio…';
   try {
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${k}`);
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models`, {
+      headers: { 'x-goog-api-key': k }
+    });
     const d = await r.json();
     if (!r.ok) throw new Error(d.error?.message || 'Key failed');
 
@@ -1379,7 +1460,7 @@ document.getElementById('saveCfgBtn').addEventListener('click', () => {
   if (newPin.length === 4) localStorage.setItem(PARENT_PIN_KEY, newPin);
 
   document.getElementById('cfgDlg').close();
-  showToast('Parent settings saved!');
+  showToast('Settings saved!');
 });
 
 /* =====================================================================
@@ -1404,6 +1485,7 @@ document.getElementById('ancBtn').addEventListener('click', function() {
   anchorBoldOn = !anchorBoldOn;
   this.textContent = `Aa Anchor bold: ${anchorBoldOn ? 'On' : 'Off'}`;
   renderAll();
+  loadSubjectChat();
 });
 
 document.querySelectorAll('.tints button').forEach(b => {
@@ -1438,22 +1520,6 @@ document.querySelectorAll('[data-q]').forEach(btn => {
 document.getElementById('recBtn').addEventListener('click', () => {
   if (mediaRecorder && mediaRecorder.state === 'recording') stopRecording();
   else startRecording();
-});
-
-document.getElementById('batchProcessBtn').addEventListener('click', async () => {
-  const list = await idbGetAll('lectures');
-  const pending = list.filter(l => l.status === 'ready_for_processing');
-  if (!pending.length) {
-    showToast('No pending recordings waiting.');
-    return;
-  }
-  showToast(`Processing ${pending.length} lecture(s) with AI…`);
-  for (const item of pending) {
-    item.status = 'completed';
-    await idbPut('lectures', item);
-  }
-  updateQueueUI();
-  showToast('Study guides and practice drills generated!');
 });
 
 // App Startup
